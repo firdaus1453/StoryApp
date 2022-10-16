@@ -1,21 +1,20 @@
 package com.firdaus1453.storyapp.presentation.login
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.firdaus1453.storyapp.data.StoryRepository
 import com.firdaus1453.storyapp.data.local.model.UserModel
+import com.firdaus1453.storyapp.data.remote.body.LoginRequest
 import kotlinx.coroutines.launch
 
 class LoginViewModel(private val storyRepository: StoryRepository) : ViewModel() {
-    fun getUser(): LiveData<UserModel> {
-        return storyRepository.getUser().asLiveData()
-    }
 
-    fun login() {
+    fun loginUser(loginRequest: LoginRequest) = storyRepository.loginUser(loginRequest)
+
+    fun saveUser(userModel: UserModel) {
         viewModelScope.launch {
-            storyRepository.login()
+            storyRepository.saveUser(userModel)
         }
     }
+
+    fun checkLogin() = storyRepository.isLogin().asLiveData()
 }

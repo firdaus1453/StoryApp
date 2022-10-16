@@ -10,10 +10,14 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import com.firdaus1453.storyapp.data.Result
 import com.firdaus1453.storyapp.data.local.model.UserModel
+import com.firdaus1453.storyapp.data.remote.body.LoginRequest
+import com.firdaus1453.storyapp.data.remote.body.SignupRequest
 import com.firdaus1453.storyapp.databinding.ActivitySignupBinding
 import com.firdaus1453.storyapp.presentation.ViewModelFactory
 import com.firdaus1453.storyapp.presentation.login.LoginActivity
+import com.firdaus1453.storyapp.presentation.main.MainActivity
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
@@ -67,19 +71,42 @@ class SignupActivity : AppCompatActivity() {
                     binding.passwordEditTextLayout.error = "Masukkan password"
                 }
                 else -> {
-                    signupViewModel.saveUser(UserModel(name, email, password, false))
-                    AlertDialog.Builder(this).apply {
-                        setTitle("Yeah!")
-                        setMessage("Akunnya sudah jadi.")
-                        setPositiveButton("Lanjut") { _, _ ->
-                            val intent = Intent(context, LoginActivity::class.java)
-                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                            startActivity(intent)
-                            finish()
+                    signupViewModel.signUp(SignupRequest(name, email, password))
+                        .observe(this) { result ->
+                            if (result != null) {
+                                when (result) {
+                                    is Result.Error -> {
+                                        val error = result.error
+                                        AlertDialog.Builder(this).apply {
+                                            setTitle("Maaf")
+                                            setMessage(error)
+                                            setPositiveButton("coba lagi") { _, _ ->
+                                            }
+                                            create()
+                                            show()
+                                        }
+                                    }
+                                    Result.Loading -> {
+
+                                    }
+                                    is Result.Success -> {
+                                        AlertDialog.Builder(this).apply {
+                                            setTitle("Yeah!")
+                                            setMessage("Akunnya sudah jadi.")
+                                            setPositiveButton("Lanjut") { _, _ ->
+                                                val intent = Intent(context, LoginActivity::class.java)
+                                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                                startActivity(intent)
+                                                finish()
+                                            }
+                                            create()
+                                            show()
+                                        }
+                                    }
+                                }
+                            }
+
                         }
-                        create()
-                        show()
-                    }
                 }
             }
         }

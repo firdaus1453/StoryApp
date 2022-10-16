@@ -19,24 +19,22 @@ class UserPreference constructor(private val context: Context) {
         return context.dataStore.data.map { preferences ->
             UserModel(
                 preferences[NAME_KEY] ?:"",
-                preferences[EMAIL_KEY] ?:"",
                 preferences[TOKEN_KEY] ?:"",
                 preferences[STATE_KEY] ?: false
             )
         }
     }
 
-    suspend fun saveUser(user: UserModel) {
-        context.dataStore.edit { preferences ->
-            preferences[NAME_KEY] = user.name
-            preferences[EMAIL_KEY] = user.email
-            preferences[TOKEN_KEY] = user.token
-            preferences[STATE_KEY] = user.isLogin
+    fun isLogin(): Flow<Boolean> {
+        return context.dataStore.data.map { preferences ->
+            preferences[STATE_KEY] ?: false
         }
     }
 
-    suspend fun login() {
+    suspend fun saveUser(user: UserModel) {
         context.dataStore.edit { preferences ->
+            preferences[NAME_KEY] = user.name
+            preferences[TOKEN_KEY] = user.token
             preferences[STATE_KEY] = true
         }
     }
@@ -44,7 +42,6 @@ class UserPreference constructor(private val context: Context) {
     suspend fun logout() {
         context.dataStore.edit { preferences ->
             preferences[NAME_KEY] = ""
-            preferences[EMAIL_KEY] = ""
             preferences[TOKEN_KEY] = ""
             preferences[STATE_KEY] = false
         }
@@ -53,7 +50,6 @@ class UserPreference constructor(private val context: Context) {
     companion object {
         const val DATASOURCE_NAME = "settings"
         private val NAME_KEY = stringPreferencesKey("name")
-        private val EMAIL_KEY = stringPreferencesKey("email")
         private val TOKEN_KEY = stringPreferencesKey("token")
         private val STATE_KEY = booleanPreferencesKey("state")
 

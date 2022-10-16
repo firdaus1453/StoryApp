@@ -10,17 +10,17 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import com.firdaus1453.storyapp.data.Result
 import com.firdaus1453.storyapp.data.local.model.UserModel
+import com.firdaus1453.storyapp.data.remote.body.LoginRequest
 import com.firdaus1453.storyapp.databinding.ActivityLoginBinding
 import com.firdaus1453.storyapp.presentation.ViewModelFactory
 import com.firdaus1453.storyapp.presentation.main.MainActivity
 import com.firdaus1453.storyapp.presentation.signup.SignupActivity
 
-
 class LoginActivity : AppCompatActivity() {
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var user: UserModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,12 +51,57 @@ class LoginActivity : AppCompatActivity() {
         val viewModel: LoginViewModel by viewModels {
             factory
         }
-        loginViewModel = viewModel
-
-        loginViewModel.getUser().observe(this) { user ->
-            this.user = user
+        loginViewModel = viewModel.apply {
+            checkLogin().observe(this@LoginActivity) {
+                if (it) {
+                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                    finish()
+                }
+            }
         }
+//        with(loginViewModel) {
+//            observe(loginResponse, ::onLoginViewState)
+//        }
     }
+
+    /*private fun onLoginViewState(liveData: LiveData<Result<String?>>) {
+        liveData.value.let {  result ->
+            if (result != null) {
+                when(result) {
+                    is Result.Error -> {
+                        AlertDialog.Builder(this).apply {
+                            setTitle("Maff")
+                            setMessage("Anda gagal login")
+                            setPositiveButton("coba lagi") { _, _ ->
+                            }
+                            create()
+                            show()
+                        }
+                    }
+                    Result.Loading -> {
+
+                    }
+                    is Result.Success -> {
+                        AlertDialog.Builder(this).apply {
+                            setTitle("Yeah!")
+                            setMessage("Anda berhasil login.")
+                            setPositiveButton("Lanjut") { _, _ ->
+                                val intent = Intent(context, MainActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                startActivity(intent)
+                                finish()
+                            }
+                            create()
+                            show()
+                        }
+                    }
+                }
+            }
+        }
+    }*/
+
 
     private fun setupAction() {
         binding.loginButton.setOnClickListener {
@@ -69,23 +114,52 @@ class LoginActivity : AppCompatActivity() {
                 password.isEmpty() -> {
                     binding.passwordEditTextLayout.error = "Masukkan password"
                 }
-                email != user.email -> {
-                    binding.emailEditTextLayout.error = "Email tidak sesuai"
-                }
                 else -> {
-                    loginViewModel.login()
-                    AlertDialog.Builder(this).apply {
-                        setTitle("Yeah!")
-                        setMessage("Anda berhasil login.")
-                        setPositiveButton("Lanjut") { _, _ ->
-                            val intent = Intent(context, MainActivity::class.java)
-                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                            startActivity(intent)
-                            finish()
+                    loginViewModel.loginUser(LoginRequest(email, password))
+                        .observe(this) { result ->
+                            if (result != null) {
+                                when (result) {
+                                    is Result.Error -> {
+                                        AlertDialog.Builder(this).apply {
+                                            setTitle("Maaf")
+                                            setMessage("Anda gagal login")
+                                            setPositiveButton("coba lagi") { _, _ ->
+                                            }
+                                            create()
+                                            show()
+                                        }
+                                    }
+                                    Result.Loading -> {
+
+                                    }
+                                    is Result.Success -> {
+                                        val loginResult = result.data
+                                        loginViewModel.saveUser(
+                                            UserModel(
+                                                loginResult?.name ?: "",
+                                                loginResult?.token ?: "",
+                                                true
+                                            )
+                                        )
+                                        AlertDialog.Builder(this).apply {
+                                            setTitle("Yeah!")
+                                            setMessage("Anda berhasil login.")
+                                            setPositiveButton("Lanjut") { _, _ ->
+                                                val intent =
+                                                    Intent(context, MainActivity::class.java)
+                                                intent.flags =
+                                                    Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                                startActivity(intent)
+                                                finish()
+                                            }
+                                            create()
+                                            show()
+                                        }
+                                    }
+                                }
+                            }
+
                         }
-                        create()
-                        show()
-                    }
                 }
             }
         }

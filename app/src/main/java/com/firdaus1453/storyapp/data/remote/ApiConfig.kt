@@ -1,5 +1,6 @@
 package com.firdaus1453.storyapp.data.remote
 
+import com.firdaus1453.storyapp.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -7,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiConfig {
 
-    var BASE_URL = "https://story-api.dicoding.dev/v1/"
+    private var BASE_URL = BuildConfig.BASE_URL
 
     fun getApiService(): ApiService {
         val loggingInterceptor = HttpLoggingInterceptor()
