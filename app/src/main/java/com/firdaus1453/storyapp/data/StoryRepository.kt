@@ -1,7 +1,7 @@
 package com.firdaus1453.storyapp.data
 
 import com.firdaus1453.storyapp.data.local.model.UserModel
-import com.firdaus1453.storyapp.data.local.model.UserPreference
+import com.firdaus1453.storyapp.data.local.UserPreference
 import com.firdaus1453.storyapp.data.remote.ApiService
 import kotlinx.coroutines.flow.Flow
 

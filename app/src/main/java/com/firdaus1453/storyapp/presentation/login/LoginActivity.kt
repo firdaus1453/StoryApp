@@ -1,6 +1,5 @@
 package com.firdaus1453.storyapp.presentation.login
 
-import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
@@ -14,7 +13,6 @@ import androidx.appcompat.app.AlertDialog
 import com.firdaus1453.storyapp.data.local.model.UserModel
 import com.firdaus1453.storyapp.databinding.ActivityLoginBinding
 import com.firdaus1453.storyapp.presentation.ViewModelFactory
-import com.firdaus1453.storyapp.presentation.ViewModelFactory.Companion.dataStore
 import com.firdaus1453.storyapp.presentation.main.MainActivity
 import com.firdaus1453.storyapp.presentation.signup.SignupActivity
 
@@ -49,7 +47,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        val factory: ViewModelFactory = ViewModelFactory.getInstance(this.dataStore)
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
         val viewModel: LoginViewModel by viewModels {
             factory
         }
@@ -105,19 +103,6 @@ class LoginActivity : AppCompatActivity() {
             duration = 6000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
-        }.start()
-
-        val title = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(500)
-        val message = ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(500)
-        val emailTextView = ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(500)
-        val emailEditTextLayout = ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(500)
-        val passwordTextView = ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(500)
-        val passwordEditTextLayout = ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(500)
-        val login = ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(500)
-
-        AnimatorSet().apply {
-            playSequentially(title, message, emailTextView, emailEditTextLayout, passwordTextView, passwordEditTextLayout, login)
-            startDelay = 500
         }.start()
     }
 

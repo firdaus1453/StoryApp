@@ -1,9 +1,6 @@
 package com.firdaus1453.storyapp.presentation
 
 import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.firdaus1453.storyapp.data.StoryRepository
@@ -28,13 +25,12 @@ class ViewModelFactory(private val storyRepository: StoryRepository) : ViewModel
     }
 
     companion object {
-        val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
         @Volatile
         private var instance: ViewModelFactory? = null
-        fun getInstance(dataStore : DataStore<Preferences>): ViewModelFactory =
+        fun getInstance(context: Context): ViewModelFactory =
             instance ?: synchronized(this) {
-                instance ?: ViewModelFactory(Injection.provideRepository(dataStore))
+                instance ?: ViewModelFactory(Injection.provideRepository(context))
             }.also { instance = it }
     }
 }
