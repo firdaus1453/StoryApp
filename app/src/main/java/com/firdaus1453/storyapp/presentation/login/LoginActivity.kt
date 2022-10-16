@@ -2,7 +2,6 @@ package com.firdaus1453.storyapp.presentation.login
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -10,19 +9,15 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
 import com.firdaus1453.storyapp.data.local.model.UserModel
-import com.firdaus1453.storyapp.data.local.model.UserPreference
 import com.firdaus1453.storyapp.databinding.ActivityLoginBinding
 import com.firdaus1453.storyapp.presentation.ViewModelFactory
+import com.firdaus1453.storyapp.presentation.ViewModelFactory.Companion.dataStore
 import com.firdaus1453.storyapp.presentation.main.MainActivity
 import com.firdaus1453.storyapp.presentation.signup.SignupActivity
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var loginViewModel: LoginViewModel
@@ -54,10 +49,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        loginViewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(UserPreference.getInstance(dataStore))
-        )[LoginViewModel::class.java]
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(this.dataStore)
+        val viewModel: LoginViewModel by viewModels {
+            factory
+        }
+        loginViewModel = viewModel
 
         loginViewModel.getUser().observe(this) { user ->
             this.user = user
@@ -75,9 +71,9 @@ class LoginActivity : AppCompatActivity() {
                 password.isEmpty() -> {
                     binding.passwordEditTextLayout.error = "Masukkan password"
                 }
-//                email != user.email -> {
-//                    binding.emailEditTextLayout.error = "Email tidak sesuai"
-//                }
+                email != user.email -> {
+                    binding.emailEditTextLayout.error = "Email tidak sesuai"
+                }
                 else -> {
                     loginViewModel.login()
                     AlertDialog.Builder(this).apply {

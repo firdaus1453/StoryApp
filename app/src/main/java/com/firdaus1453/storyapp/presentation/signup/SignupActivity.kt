@@ -10,18 +10,21 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.datastore.core.DataStore
+import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.firdaus1453.storyapp.data.local.model.UserModel
 import com.firdaus1453.storyapp.data.local.model.UserPreference
 import com.firdaus1453.storyapp.databinding.ActivitySignupBinding
 import com.firdaus1453.storyapp.presentation.ViewModelFactory
+import com.firdaus1453.storyapp.presentation.ViewModelFactory.Companion.dataStore
 import com.firdaus1453.storyapp.presentation.login.LoginActivity
-
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+import com.firdaus1453.storyapp.presentation.main.MainActivity
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
@@ -52,10 +55,11 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        signupViewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(UserPreference.getInstance(dataStore))
-        )[SignupViewModel::class.java]
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(this.dataStore)
+        val viewModel: SignupViewModel by viewModels {
+            factory
+        }
+        signupViewModel = viewModel
     }
 
     private fun setupAction() {
@@ -79,7 +83,10 @@ class SignupActivity : AppCompatActivity() {
                         setTitle("Yeah!")
                         setMessage("Akunnya sudah jadi.")
                         setPositiveButton("Lanjut") { _, _ ->
-//                            finish()
+                            val intent = Intent(context, LoginActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(intent)
+                            finish()
                         }
                         create()
                         show()

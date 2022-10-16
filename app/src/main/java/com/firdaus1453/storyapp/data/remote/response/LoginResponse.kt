@@ -1,4 +1,4 @@
-package com.firdaus1453.storyapp.data.response
+package com.firdaus1453.storyapp.data.remote.response
 
 data class LoginResponse(
     val error: Boolean? = false,
