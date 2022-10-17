@@ -4,10 +4,10 @@ import android.content.Context
 import android.graphics.Canvas
 import android.text.InputType
 import android.util.AttributeSet
-import androidx.appcompat.widget.AppCompatEditText
 import com.firdaus1453.storyapp.R
+import com.google.android.material.textfield.TextInputLayout
 
-class PasswordEditText : AppCompatEditText {
+class PasswordEditText : TextInputLayout {
 
     constructor(context: Context) : super(context) {
         init()
@@ -27,14 +27,16 @@ class PasswordEditText : AppCompatEditText {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        if (isFocused) {
-            if (text.toString().length < 6 && text.toString().isNotEmpty()) {
-                error = context.getString(R.string.error_min_6_char)
+        if (editText?.isFocused == true) {
+            error = if (editText?.text.toString().length < 6 && editText?.toString()?.isNotEmpty() == true) {
+                context.getString(R.string.error_min_6_char)
+            } else {
+                null
             }
         }
     }
 
     private fun init() {
-        inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_CLASS_TEXT
+        editText?.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_CLASS_TEXT
     }
 }

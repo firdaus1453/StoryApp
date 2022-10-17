@@ -6,7 +6,7 @@
     <string name="title_signup_page">Lengkapi data dirimu di bawah ini ya</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="message_login_page">Masukkan dulu datamu ya</string>
+    <string name="message_login_page">Selamat datang di Story App</string>
     <string name="name">Nama</string>
     <string name="footer_new_account">Baru nyoba Story App?&#160;</string>
     <string name="footer_have_account">Sudah punya account?&#160;</string>
@@ -15,7 +15,17 @@
     <string name="title_home">Home</string>
     <string name="profile">Profile</string>
     <string name="title_activity_main">Main</string>
-    <string name="error_min_6_char">"Password harus kurang dari 6 karakter"</string>
+    <string name="error_min_6_char">"Password harus lebih dari 6 karakter"</string>
     <string name="hint_password">"Masukkan password"</string>
     <string name="title_change_language">"Ganti Bahasa"</string>
+    <string name="title_sory">Maaf</string>
+    <string name="failed_login">Anda gagal login</string>
+    <string name="error_fill_email">Masukkan email</string>
+    <string name="error_fill_password">Masukkan password</string>
+    <string name="try_again">coba lagi</string>
+    <string name="error_fill_name">Masukkan nama</string>
+    <string name="title_yeah">Yeah!</string>
+    <string name="account_create_success">Akunnya sudah jadi.</string>
+    <string name="next">Lanjut</string>
+    <string name="failed_register">Gagal membuat account</string>
 </resources>

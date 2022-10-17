@@ -13,9 +13,24 @@ class ProfileViewModel(private val storyRepository: StoryRepository) : ViewModel
     }
     val text: LiveData<String> = _text
 
+    private val _nameUser = MutableLiveData<String>()
+    val nameUser: LiveData<String> = _nameUser
+
+    init {
+        getNameUser()
+    }
+
     fun logout() {
         viewModelScope.launch {
             storyRepository.logout()
+        }
+    }
+
+    private fun getNameUser() {
+        viewModelScope.launch {
+            storyRepository.getUser().collect{
+                _nameUser.value = it.name
+            }
         }
     }
 }

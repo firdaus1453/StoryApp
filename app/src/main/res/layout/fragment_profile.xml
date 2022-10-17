@@ -19,7 +19,7 @@
         app:layout_constraintVertical_chainStyle="packed">
 
         <TextView
-            android:id="@+id/textview"
+            android:id="@+id/tv_first_letter_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -50,12 +50,11 @@
     <Button
         android:id="@+id/btn_change_language"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="58dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="32dp"
         android:text="@string/title_change_language"
-        android:textColor="?attr/text_color"
         app:layout_constraintBottom_toTopOf="@+id/btn_logout"
         app:layout_constraintEnd_toEndOf="@+id/tv_name_profile"
         app:layout_constraintStart_toStartOf="@+id/tv_name_profile"
@@ -65,12 +64,11 @@
     <Button
         android:id="@+id/btn_logout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="58dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="32dp"
         android:text="@string/logout"
-        android:textColor="?attr/text_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/btn_change_language"
         app:layout_constraintStart_toStartOf="@+id/btn_change_language"

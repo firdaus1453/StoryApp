@@ -10,11 +10,14 @@ import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
+import com.firdaus1453.storyapp.R
 import com.firdaus1453.storyapp.data.Result
 import com.firdaus1453.storyapp.data.remote.body.SignupRequest
 import com.firdaus1453.storyapp.databinding.ActivitySignupBinding
 import com.firdaus1453.storyapp.presentation.ViewModelFactory
 import com.firdaus1453.storyapp.presentation.login.LoginActivity
+import com.firdaus1453.storyapp.util.observe
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
@@ -50,60 +53,78 @@ class SignupActivity : AppCompatActivity() {
             factory
         }
         signupViewModel = viewModel
+        with(signupViewModel) {
+            observe(signupResult, ::signupStateView)
+        }
+    }
+
+    private fun signupStateView(result: Result<String?>) {
+        when (result) {
+            is Result.Success -> {
+                AlertDialog.Builder(this).apply {
+                    setTitle(getString(R.string.title_yeah))
+                    setMessage(getString(R.string.account_create_success))
+                    setPositiveButton(getString(R.string.next)) { _, _ ->
+                        val intent = Intent(context, LoginActivity::class.java)
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                        finish()
+                    }
+                    create()
+                    show()
+                }
+                binding.progressBarContainer.visibility = View.GONE
+            }
+
+            is Result.Error -> {
+                AlertDialog.Builder(this).apply {
+                    setTitle(getString(R.string.title_sory))
+                    setMessage(getString(R.string.failed_register))
+                    setPositiveButton(getString(R.string.try_again)) { _, _ ->
+                    }
+                    create()
+                    show()
+                }
+                binding.progressBarContainer.visibility = View.GONE
+            }
+
+            Result.Loading -> {
+                binding.progressBarContainer.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun setupAction() {
+        binding.nameEditText.addTextChangedListener {
+            if (it.toString().isNotEmpty()) {
+                binding.nameEditTextLayout.error = null
+            }
+        }
+        binding.emailEditText.addTextChangedListener {
+            if (it.toString().isNotEmpty()) {
+                binding.emailEditTextLayout.error = null
+            }
+        }
         binding.signupButton.setOnClickListener {
             val name = binding.nameEditText.text.toString()
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
             when {
                 name.isEmpty() -> {
-                    binding.nameEditTextLayout.error = "Masukkan email"
+                    binding.nameEditTextLayout.error = getString(R.string.error_fill_name)
                 }
                 email.isEmpty() -> {
-                    binding.emailEditTextLayout.error = "Masukkan email"
+                    binding.emailEditTextLayout.error = getString(R.string.error_fill_email)
                 }
                 password.isEmpty() -> {
-                    binding.passwordEditTextLayout.error = "Masukkan password"
+                    binding.passwordEditTextLayout.error = getString(R.string.error_fill_password)
+                }
+                password.length < 6 -> {
+                    binding.passwordEditTextLayout.error = getString(R.string.error_min_6_char)
                 }
                 else -> {
                     signupViewModel.signUp(SignupRequest(name, email, password))
-                        .observe(this) { result ->
-                            if (result != null) {
-                                when (result) {
-                                    is Result.Error -> {
-                                        val error = result.error
-                                        AlertDialog.Builder(this).apply {
-                                            setTitle("Maaf")
-                                            setMessage(error)
-                                            setPositiveButton("coba lagi") { _, _ ->
-                                            }
-                                            create()
-                                            show()
-                                        }
-                                    }
-                                    Result.Loading -> {
-
-                                    }
-                                    is Result.Success -> {
-                                        AlertDialog.Builder(this).apply {
-                                            setTitle("Yeah!")
-                                            setMessage("Akunnya sudah jadi.")
-                                            setPositiveButton("Lanjut") { _, _ ->
-                                                val intent = Intent(context, LoginActivity::class.java)
-                                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                                                startActivity(intent)
-                                                finish()
-                                            }
-                                            create()
-                                            show()
-                                        }
-                                    }
-                                }
-                            }
-
-                        }
                 }
             }
         }

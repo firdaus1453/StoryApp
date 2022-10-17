@@ -6,7 +6,6 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.firdaus1453.storyapp.databinding.FragmentProfileBinding
@@ -36,8 +35,11 @@ class ProfileFragment : Fragment() {
         val viewModel: ProfileViewModel by viewModels {
             factory
         }
-        viewModel.text.observe(viewLifecycleOwner) {
-            binding.tvNameProfile.text = it
+        viewModel.nameUser.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                binding.tvNameProfile.text = it
+                binding.tvFirstLetterName.text = it.substring(0,1)
+            }
         }
         setupView(viewModel)
     }
