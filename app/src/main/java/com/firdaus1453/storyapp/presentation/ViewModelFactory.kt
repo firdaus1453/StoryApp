@@ -7,6 +7,7 @@ import com.firdaus1453.storyapp.data.StoryRepository
 import com.firdaus1453.storyapp.presentation.login.LoginViewModel
 import com.firdaus1453.storyapp.presentation.signup.SignupViewModel
 import com.firdaus1453.storyapp.di.Injection
+import com.firdaus1453.storyapp.presentation.profile.ProfileViewModel
 
 
 class ViewModelFactory(private val storyRepository: StoryRepository) : ViewModelProvider.NewInstanceFactory() {
@@ -19,6 +20,9 @@ class ViewModelFactory(private val storyRepository: StoryRepository) : ViewModel
             }
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
                 LoginViewModel(storyRepository) as T
+            }
+            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
+                ProfileViewModel(storyRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

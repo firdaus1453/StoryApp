@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.firdaus1453.storyapp.databinding.FragmentProfileBinding
+import com.firdaus1453.storyapp.presentation.ViewModelFactory
+import com.firdaus1453.storyapp.presentation.login.LoginActivity
 
 class ProfileFragment : Fragment() {
 
@@ -24,22 +26,32 @@ class ProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val profileViewModel =
-            ViewModelProvider(this)[ProfileViewModel::class.java]
-
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        setupView()
-        val textView: TextView = binding.tvNameProfile
-        profileViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+        return binding.root
     }
 
-    private fun setupView() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(requireActivity())
+        val viewModel: ProfileViewModel by viewModels {
+            factory
+        }
+        viewModel.text.observe(viewLifecycleOwner) {
+            binding.tvNameProfile.text = it
+        }
+        setupView(viewModel)
+    }
+
+    private fun setupView(viewModel: ProfileViewModel) {
         binding.btnChangeLanguage.setOnClickListener {
             startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+        }
+        binding.btnLogout.setOnClickListener {
+            viewModel.logout()
+            val intent = Intent(context, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            activity?.finish()
         }
     }
 
