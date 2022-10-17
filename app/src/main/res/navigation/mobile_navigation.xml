@@ -14,7 +14,7 @@
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.firdaus1453.storyapp.presentation.profile.ProfileFragment"
-        android:label="@string/profil"
+        android:label="@string/profile"
         tools:layout="@layout/fragment_profile" />
 
 </navigation>

@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="MyThemeOverlay_Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
-        <item name="android:textColorPrimary">?attr/text_color</item>
-        <item name="backgroundColor">?attr/background_color</item>
-        <item name="colorPrimary">?attr/background_color</item>
-        <item name="colorOnPrimary">?attr/background_color</item>
+    <style name="circleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
     </style>
 </resources>

@@ -3,21 +3,18 @@ package com.firdaus1453.storyapp.presentation.signup
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.firdaus1453.storyapp.data.Result
-import com.firdaus1453.storyapp.data.local.model.UserModel
-import com.firdaus1453.storyapp.data.remote.body.LoginRequest
 import com.firdaus1453.storyapp.data.remote.body.SignupRequest
 import com.firdaus1453.storyapp.databinding.ActivitySignupBinding
 import com.firdaus1453.storyapp.presentation.ViewModelFactory
 import com.firdaus1453.storyapp.presentation.login.LoginActivity
-import com.firdaus1453.storyapp.presentation.main.MainActivity
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding

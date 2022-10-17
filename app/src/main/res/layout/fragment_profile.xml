@@ -6,17 +6,74 @@
     android:layout_height="match_parent"
     tools:context=".presentation.profile.ProfileFragment">
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/circle_profile"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        app:cardBackgroundColor="@color/green"
+        app:cardCornerRadius="130dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_name_profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <TextView
+            android:id="@+id/textview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="D"
+            android:textColor="?attr/text_color"
+            android:textSize="80sp"
+            android:textStyle="bold"
+            app:textAllCaps="true" />
+    </com.google.android.material.card.MaterialCardView>
+
     <TextView
-        android:id="@+id/text_dashboard"
+        android:id="@+id/tv_name_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
+        android:gravity="center"
+        android:text="Reyhan Baik"
+        android:textColor="?attr/text_color"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/btn_change_language"
+        app:layout_constraintEnd_toEndOf="@+id/circle_profile"
+        app:layout_constraintStart_toStartOf="@+id/circle_profile"
+        app:layout_constraintTop_toBottomOf="@+id/circle_profile" />
+
+    <Button
+        android:id="@+id/btn_change_language"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/title_change_language"
+        android:textColor="?attr/text_color"
+        app:layout_constraintBottom_toTopOf="@+id/btn_logout"
+        app:layout_constraintEnd_toEndOf="@+id/tv_name_profile"
+        app:layout_constraintStart_toStartOf="@+id/tv_name_profile"
+        app:layout_constraintTop_toBottomOf="@id/tv_name_profile"
+        app:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/logout"
+        android:textColor="?attr/text_color"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/btn_change_language"
+        app:layout_constraintStart_toStartOf="@+id/btn_change_language"
+        app:layout_constraintTop_toBottomOf="@id/btn_change_language"
+        app:textAllCaps="false" />
 </androidx.constraintlayout.widget.ConstraintLayout>

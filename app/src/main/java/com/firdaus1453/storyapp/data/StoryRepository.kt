@@ -3,15 +3,13 @@ package com.firdaus1453.storyapp.data
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
-import com.firdaus1453.storyapp.data.local.model.UserModel
 import com.firdaus1453.storyapp.data.local.UserPreference
+import com.firdaus1453.storyapp.data.local.model.UserModel
 import com.firdaus1453.storyapp.data.remote.ApiService
 import com.firdaus1453.storyapp.data.remote.body.LoginRequest
 import com.firdaus1453.storyapp.data.remote.body.SignupRequest
-import com.firdaus1453.storyapp.data.remote.response.LoginResponse
 import com.firdaus1453.storyapp.data.remote.response.LoginResult
 import kotlinx.coroutines.flow.Flow
-import java.lang.Exception
 
 class StoryRepository(
     private val apiService: ApiService,

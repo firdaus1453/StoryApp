@@ -120,11 +120,10 @@
         app:layout_constraintTop_toBottomOf="@+id/passwordTextView"
         app:passwordToggleEnabled="true">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.firdaus1453.storyapp.util.PasswordEditText
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:inputType="textPassword"
             app:passwordToggleEnabled="true" />
     </com.google.android.material.textfield.TextInputLayout>
