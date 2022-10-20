@@ -1,7 +1,7 @@
 package com.firdaus1453.storyapp.presentation.home
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +15,7 @@ import com.firdaus1453.storyapp.data.Result
 import com.firdaus1453.storyapp.data.remote.response.Stories
 import com.firdaus1453.storyapp.databinding.FragmentHomeBinding
 import com.firdaus1453.storyapp.presentation.ViewModelFactory
+import com.firdaus1453.storyapp.presentation.detail.DetailActivity
 import com.firdaus1453.storyapp.util.observe
 
 class HomeFragment : Fragment() {
@@ -23,7 +24,6 @@ class HomeFragment : Fragment() {
 
     private val binding get() = _binding!!
     private lateinit var adapter: HomeAdapter
-    private lateinit var homeViewModel: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,34 +40,31 @@ class HomeFragment : Fragment() {
         val viewModel: HomeViewModel by viewModels {
             factory
         }
-        homeViewModel = viewModel
-        with(homeViewModel) {
+        with(viewModel) {
             observe(stories, ::storiesStateView)
-            observe(token, ::tokenStateView)
         }
         binding.sfHome.setOnRefreshListener {
-            homeViewModel.getToken()
+            viewModel.getStories()
             binding.sfHome.isRefreshing = false
         }
+        adapter = HomeAdapter(HomeAdapter.OnClickListener {
+            onItemClicked(it)
+        })
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
         binding.rvStories.layoutManager = layoutManager
-    }
-
-    private fun tokenStateView(token: String) {
-        homeViewModel.getStories(token)
     }
 
     private fun storiesStateView(result: Result<List<Stories>?>) {
         when (result) {
             is Result.Success -> {
-                Log.d("stories", "storiesStateView: ${result.data}")
-                adapter = HomeAdapter(result.data ?: listOf())
+                adapter.submitList(result.data)
                 binding.rvStories.adapter = adapter
                 binding.progressBarContainer.visibility = View.GONE
             }
 
             is Result.Error -> {
-                Toast.makeText(requireContext(), "Gagal memuat, silahkan coba lagi", LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Gagal memuat, silahkan coba lagi", LENGTH_SHORT)
+                    .show()
                 binding.progressBarContainer.visibility = View.GONE
             }
 
@@ -75,6 +72,12 @@ class HomeFragment : Fragment() {
                 binding.progressBarContainer.visibility = View.VISIBLE
             }
         }
+    }
+
+    fun onItemClicked(id: String) {
+        val intent = Intent(activity, DetailActivity::class.java)
+        intent.putExtra(DetailActivity.KEY_ID_STORY, id)
+        startActivity(intent)
     }
 
     override fun onDestroyView() {

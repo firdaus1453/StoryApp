@@ -14,25 +14,25 @@ class HomeViewModel(private val storyRepository: StoryRepository) : ViewModel() 
     private val _stories = MutableLiveData<Result<List<Stories>?>>()
     val stories: LiveData<Result<List<Stories>?>> = _stories
 
-    private val _token = MutableLiveData<String>()
-    val token: LiveData<String> = _token
+    private var token: String? = ""
 
     init {
-        getToken()
+        getStories()
     }
 
-    fun getToken() {
+    fun getStories() {
+        getToken()
         viewModelScope.launch {
-            storyRepository.getUser().collect{
-                _token.value = it.token
+            storyRepository.getStories(token ?: "").collect {
+                _stories.value = it
             }
         }
     }
 
-    fun getStories(token: String) {
+    private fun getToken() {
         viewModelScope.launch {
-            storyRepository.getStories(token).collect {
-                _stories.value = it
+            storyRepository.getUser().collect {
+                token = it.token
             }
         }
     }

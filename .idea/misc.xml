@@ -14,6 +14,7 @@
         <entry key="app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.2715" />
         <entry key="app/src/main/res/drawable/ic_refresh_black.xml" value="0.2715" />
         <entry key="app/src/main/res/drawable/transparent_background.xml" value="0.2715" />
+        <entry key="app/src/main/res/layout/activity_detail.xml" value="0.30932971014492755" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.3120471014492754" />
