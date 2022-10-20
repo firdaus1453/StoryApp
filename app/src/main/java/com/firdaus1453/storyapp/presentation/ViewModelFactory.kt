@@ -7,6 +7,7 @@ import com.firdaus1453.storyapp.data.StoryRepository
 import com.firdaus1453.storyapp.presentation.login.LoginViewModel
 import com.firdaus1453.storyapp.presentation.signup.SignupViewModel
 import com.firdaus1453.storyapp.di.Injection
+import com.firdaus1453.storyapp.presentation.home.HomeViewModel
 import com.firdaus1453.storyapp.presentation.profile.ProfileViewModel
 
 
@@ -15,6 +16,9 @@ class ViewModelFactory(private val storyRepository: StoryRepository) : ViewModel
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
+            modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
+                HomeViewModel(storyRepository) as T
+            }
             modelClass.isAssignableFrom(SignupViewModel::class.java) -> {
                 SignupViewModel(storyRepository) as T
             }

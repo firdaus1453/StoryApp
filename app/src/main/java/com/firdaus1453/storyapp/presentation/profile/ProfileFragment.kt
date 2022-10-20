@@ -16,8 +16,6 @@ class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -38,7 +36,7 @@ class ProfileFragment : Fragment() {
         viewModel.nameUser.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
                 binding.tvNameProfile.text = it
-                binding.tvFirstLetterName.text = it.substring(0,1)
+                binding.tvFirstLetterName.text = it.substring(0, 1)
             }
         }
         setupView(viewModel)

@@ -23,11 +23,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="D"
-            android:textColor="?attr/text_color"
+            android:textColor="@color/white"
             android:textSize="80sp"
             android:textStyle="bold"
-            app:textAllCaps="true" />
+            app:textAllCaps="true"
+            tools:text="D" />
     </com.google.android.material.card.MaterialCardView>
 
     <TextView

@@ -3,11 +3,37 @@ package com.firdaus1453.storyapp.presentation.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.firdaus1453.storyapp.data.Result
+import com.firdaus1453.storyapp.data.StoryRepository
+import com.firdaus1453.storyapp.data.remote.response.Stories
+import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(private val storyRepository: StoryRepository) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+    private val _stories = MutableLiveData<Result<List<Stories>?>>()
+    val stories: LiveData<Result<List<Stories>?>> = _stories
+
+    private val _token = MutableLiveData<String>()
+    val token: LiveData<String> = _token
+
+    init {
+        getToken()
     }
-    val text: LiveData<String> = _text
+
+    fun getToken() {
+        viewModelScope.launch {
+            storyRepository.getUser().collect{
+                _token.value = it.token
+            }
+        }
+    }
+
+    fun getStories(token: String) {
+        viewModelScope.launch {
+            storyRepository.getStories(token).collect {
+                _stories.value = it
+            }
+        }
+    }
 }
