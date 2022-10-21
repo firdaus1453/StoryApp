@@ -28,4 +28,5 @@
     <string name="account_create_success">Akunnya sudah jadi.</string>
     <string name="next">Lanjut</string>
     <string name="failed_register">Gagal membuat account</string>
+    <string name="shared_transition">shared transition</string>
 </resources>

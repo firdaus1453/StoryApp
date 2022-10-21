@@ -58,12 +58,12 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
         android:scaleType="centerCrop"
-        android:background="@color/white"
-        android:src="@color/teal_200"
+        android:transitionName="@string/shared_transition"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cv_circle_profile"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        tools:src="@color/teal_200" />
 
     <TextView
         android:id="@+id/tv_item_desc"
