@@ -5,12 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
+import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.firdaus1453.storyapp.R
 import com.firdaus1453.storyapp.data.Result
 import com.firdaus1453.storyapp.data.remote.response.Stories
 import com.firdaus1453.storyapp.databinding.FragmentHomeBinding
@@ -47,9 +50,9 @@ class HomeFragment : Fragment() {
             viewModel.getStories()
             binding.sfHome.isRefreshing = false
         }
-        adapter = HomeAdapter(HomeAdapter.OnClickListener {
-            onItemClicked(it)
-        })
+        adapter = HomeAdapter { iv, id ->
+            onItemClicked(iv, id)
+        }
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
         binding.rvStories.layoutManager = layoutManager
     }
@@ -74,10 +77,14 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun onItemClicked(id: String) {
+    private fun onItemClicked(iv: ImageView, id: String) {
         val intent = Intent(activity, DetailActivity::class.java)
         intent.putExtra(DetailActivity.KEY_ID_STORY, id)
-        startActivity(intent)
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            requireActivity(),
+            iv, getString(R.string.shared_transition)
+        )
+        startActivity(intent, options.toBundle())
     }
 
     override fun onDestroyView() {

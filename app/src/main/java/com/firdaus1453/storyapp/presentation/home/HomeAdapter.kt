@@ -2,6 +2,7 @@ package com.firdaus1453.storyapp.presentation.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +12,7 @@ import com.firdaus1453.storyapp.R
 import com.firdaus1453.storyapp.data.remote.response.Stories
 import com.firdaus1453.storyapp.databinding.ItemStoriesBinding
 
-class HomeAdapter(private val onClickListener: OnClickListener) :
+class HomeAdapter(private val onClickListener: (iv: ImageView, id: String) -> Unit) :
     ListAdapter<Stories, HomeAdapter.HoursViewHolder>(MyDiffUtil) {
 
     companion object MyDiffUtil : DiffUtil.ItemCallback<Stories>() {
@@ -32,15 +33,12 @@ class HomeAdapter(private val onClickListener: OnClickListener) :
 
     override fun onBindViewHolder(holder: HoursViewHolder, position: Int) {
         val story = getItem(position)
-        holder.itemView.setOnClickListener {
-            onClickListener.onClick(story.id ?: "")
-        }
-        holder.bind(story)
+        holder.bind(story, onClickListener)
     }
 
-    inner class HoursViewHolder(val binding: ItemStoriesBinding) :
+    class HoursViewHolder(private val binding: ItemStoriesBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(story: Stories) {
+        fun bind(story: Stories, onClickListener: (iv: ImageView, id: String) -> Unit) {
             story.apply {
                 binding.tvName.text = name
                 binding.tvFirstLetterName.text = name?.substring(0, 1)
@@ -53,10 +51,13 @@ class HomeAdapter(private val onClickListener: OnClickListener) :
                     )
                     .into(binding.ivImgPoster)
             }
+            binding.root.setOnClickListener {
+                onClickListener(binding.ivImgPoster, story.id ?: "")
+            }
         }
     }
 
-    class OnClickListener(val onClickListener: (id: String) -> Unit) {
-        fun onClick(story: String) = onClickListener(story)
-    }
+//    class OnClickListener(val onClickListener: (iv: ImageView, id: String) -> Unit) {
+//        fun onClick(iv: ImageView, id: String) = onClickListener(iv, id)
+//    }
 }
