@@ -56,21 +56,9 @@ class LoginActivity : AppCompatActivity() {
         val viewModel: LoginViewModel by viewModels {
             factory
         }
-        loginViewModel = viewModel.apply {
-            checkLogin()
-        }
+        loginViewModel = viewModel
         with(loginViewModel) {
-            observe(isLogin, ::isLoginState)
             observe(loginResult, ::onLoginViewState)
-        }
-    }
-
-    private fun isLoginState(isLogin: Boolean) {
-        if (isLogin) {
-            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-            finish()
         }
     }
 
@@ -85,6 +73,7 @@ class LoginActivity : AppCompatActivity() {
                         true
                     )
                 )
+                navigateToMainActivity()
                 binding.progressBarContainer.visibility = View.GONE
             }
 
@@ -97,6 +86,13 @@ class LoginActivity : AppCompatActivity() {
                 binding.progressBarContainer.visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun navigateToMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
     }
 
 
