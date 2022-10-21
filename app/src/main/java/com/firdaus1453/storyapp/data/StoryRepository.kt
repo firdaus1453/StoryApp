@@ -6,7 +6,6 @@ import com.firdaus1453.storyapp.data.local.model.UserModel
 import com.firdaus1453.storyapp.data.remote.ApiService
 import com.firdaus1453.storyapp.data.remote.body.LoginRequest
 import com.firdaus1453.storyapp.data.remote.body.SignupRequest
-import com.firdaus1453.storyapp.data.remote.response.DetailStoryResponse
 import com.firdaus1453.storyapp.data.remote.response.LoginResult
 import com.firdaus1453.storyapp.data.remote.response.Stories
 import com.firdaus1453.storyapp.data.remote.response.Story
