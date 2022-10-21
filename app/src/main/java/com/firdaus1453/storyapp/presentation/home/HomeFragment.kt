@@ -66,7 +66,7 @@ class HomeFragment : Fragment() {
             }
 
             is Result.Error -> {
-                Toast.makeText(requireContext(), "Gagal memuat, silahkan coba lagi", LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.fail_loading), LENGTH_SHORT)
                     .show()
                 binding.progressBarContainer.visibility = View.GONE
             }
