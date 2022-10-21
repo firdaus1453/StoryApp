@@ -74,7 +74,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun onItemClicked(id: String) {
+    private fun onItemClicked(id: String) {
         val intent = Intent(activity, DetailActivity::class.java)
         intent.putExtra(DetailActivity.KEY_ID_STORY, id)
         startActivity(intent)

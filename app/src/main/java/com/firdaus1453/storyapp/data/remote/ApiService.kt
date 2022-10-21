@@ -1,5 +1,6 @@
 package com.firdaus1453.storyapp.data.remote
 
+import com.firdaus1453.storyapp.data.remote.response.DetailStoryResponse
 import com.firdaus1453.storyapp.data.remote.response.LoginResponse
 import com.firdaus1453.storyapp.data.remote.response.SignupResponse
 import com.firdaus1453.storyapp.data.remote.response.StoriesResponse
@@ -28,4 +29,10 @@ interface ApiService {
         @Query("size") size: Int? = null,
         @Query("location") location: Int? = null
     ): StoriesResponse
+
+    @GET("stories/{id}")
+    suspend fun getDetailStory(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+    ): DetailStoryResponse
 }
