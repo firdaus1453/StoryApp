@@ -16,7 +16,6 @@
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
         app:cardBackgroundColor="@color/green"
         app:cardCornerRadius="130dp"
         app:layout_constraintBottom_toTopOf="@+id/iv_img_poster"
@@ -56,8 +55,9 @@
         android:id="@+id/iv_img_poster"
         android:layout_width="match_parent"
         android:layout_height="328dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
+        android:scaleType="centerCrop"
         android:background="@color/white"
         android:src="@color/teal_200"
         app:layout_constraintEnd_toEndOf="parent"
@@ -77,9 +77,19 @@
         android:gravity="start"
         android:textColor="?attr/text_color"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_img_poster"
         tools:text="Tes isisi sisisi" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

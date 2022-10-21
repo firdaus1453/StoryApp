@@ -6,8 +6,10 @@ import com.firdaus1453.storyapp.data.local.model.UserModel
 import com.firdaus1453.storyapp.data.remote.ApiService
 import com.firdaus1453.storyapp.data.remote.body.LoginRequest
 import com.firdaus1453.storyapp.data.remote.body.SignupRequest
+import com.firdaus1453.storyapp.data.remote.response.DetailStoryResponse
 import com.firdaus1453.storyapp.data.remote.response.LoginResult
 import com.firdaus1453.storyapp.data.remote.response.Stories
+import com.firdaus1453.storyapp.data.remote.response.Story
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -16,6 +18,18 @@ class StoryRepository(
     private val userPreference: UserPreference
 ) {
 
+    fun getDetailStory(token: String, id: String): Flow<Result<Story?>> = flow {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getDetailStory("Bearer $token", id)
+            val result = response.story
+            emit(Result.Success(result))
+        } catch (e: Exception) {
+            Log.d("StoryRepository", "getDetailStory: ${e.message.toString()} ")
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
     fun getStories(token: String): Flow<Result<List<Stories>?>> = flow {
         emit(Result.Loading)
         try {
@@ -23,7 +37,7 @@ class StoryRepository(
             val result = response.listStory
             emit(Result.Success(result))
         } catch (e: Exception) {
-            Log.d("StoryRepository", "signup: ${e.message.toString()} ")
+            Log.d("StoryRepository", "getStories: ${e.message.toString()} ")
             emit(Result.Error(e.message.toString()))
         }
     }
