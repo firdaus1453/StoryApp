@@ -15,9 +15,6 @@ class LoginViewModel(private val storyRepository: StoryRepository) : ViewModel()
     private val _loginResult = MutableLiveData<Result<LoginResult?>>()
     val loginResult: LiveData<Result<LoginResult?>> = _loginResult
 
-    private val _isLogin = MutableLiveData<Boolean>()
-    val isLogin: LiveData<Boolean> = _isLogin
-
     fun loginUser(loginRequest: LoginRequest) {
         viewModelScope.launch {
             storyRepository.loginUser(loginRequest).collect {
@@ -29,14 +26,6 @@ class LoginViewModel(private val storyRepository: StoryRepository) : ViewModel()
     fun saveUser(userModel: UserModel) {
         viewModelScope.launch {
             storyRepository.saveUser(userModel)
-        }
-    }
-
-    fun checkLogin() {
-        viewModelScope.launch {
-            storyRepository.isLogin().collect {
-                _isLogin.value = it
-            }
         }
     }
 }
