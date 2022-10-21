@@ -28,4 +28,6 @@
     <string name="next">Lanjut</string>
     <string name="failed_register">Failed Register</string>
     <string name="shared_transition">shared transition</string>
+    <string name="fail_loading">Sory, please try again</string>
+    <string name="title_detail_story">Detail Story</string>
 </resources>

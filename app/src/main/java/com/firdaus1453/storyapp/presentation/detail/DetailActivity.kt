@@ -30,7 +30,7 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.title = getString(R.string.title_detail_story)
 
         storyId = intent.getStringExtra(KEY_ID_STORY) ?: ""
         viewModel.getDetailStory(storyId)
