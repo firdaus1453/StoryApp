@@ -30,4 +30,9 @@
     <string name="shared_transition">shared transition</string>
     <string name="fail_loading">Sory, please try again</string>
     <string name="title_detail_story">Detail Story</string>
+    <string name="title_add_story">Add Story</string>
+    <string name="title_camera">Camera</string>
+    <string name="title_gallery">Gallery</string>
+    <string name="hint_description">Your story…</string>
+    <string name="title_upload">Upload</string>
 </resources>

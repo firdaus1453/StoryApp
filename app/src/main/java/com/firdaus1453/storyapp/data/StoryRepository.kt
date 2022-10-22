@@ -6,16 +6,34 @@ import com.firdaus1453.storyapp.data.local.model.UserModel
 import com.firdaus1453.storyapp.data.remote.ApiService
 import com.firdaus1453.storyapp.data.remote.body.LoginRequest
 import com.firdaus1453.storyapp.data.remote.body.SignupRequest
+import com.firdaus1453.storyapp.data.remote.response.FileUploadResponse
 import com.firdaus1453.storyapp.data.remote.response.LoginResult
 import com.firdaus1453.storyapp.data.remote.response.Stories
 import com.firdaus1453.storyapp.data.remote.response.Story
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 class StoryRepository(
     private val apiService: ApiService,
     private val userPreference: UserPreference
 ) {
+
+    fun addNewStory(
+        token: String,
+        file: MultipartBody.Part,
+        description: RequestBody
+    ): Flow<Result<FileUploadResponse?>> = flow {
+        emit(Result.Loading)
+        try {
+            val response = apiService.addNewStory("Bearer $token", file, description)
+            emit(Result.Success(response))
+        } catch (e: Exception) {
+            Log.d("StoryRepository", "addNewStory: ${e.message.toString()} ")
+            emit(Result.Error(e.message.toString()))
+        }
+    }
 
     fun getDetailStory(token: String, id: String): Flow<Result<Story?>> = flow {
         emit(Result.Loading)

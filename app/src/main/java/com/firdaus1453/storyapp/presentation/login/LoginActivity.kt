@@ -107,7 +107,7 @@ class LoginActivity : AppCompatActivity() {
 
             override fun afterTextChanged(p0: Editable?) {}
         })
-        binding.loginButton.setOnClickListener {
+        binding.btnLogin.setOnClickListener {
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
             when {
@@ -133,7 +133,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun playAnimation() {
-        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
+        ObjectAnimator.ofFloat(binding.ivLogoLogin, View.TRANSLATION_X, -30f, 30f).apply {
             duration = 6000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE

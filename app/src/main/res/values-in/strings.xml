@@ -31,4 +31,9 @@
     <string name="shared_transition">shared transition</string>
     <string name="fail_loading">Gagal memuat, silahkan coba lagi</string>
     <string name="title_detail_story">Detail Story</string>
+    <string name="title_add_story">Tambah Story</string>
+    <string name="title_camera">Kamera</string>
+    <string name="title_gallery">Gallery</string>
+    <string name="hint_description">Ceritakan cerita mu…</string>
+    <string name="title_upload">Unggah</string>
 </resources>

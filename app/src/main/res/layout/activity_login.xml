@@ -8,7 +8,7 @@
     tools:context=".presentation.login.LoginActivity">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/iv_logo_login"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="32dp"
@@ -97,7 +97,7 @@
     </com.firdaus1453.storyapp.util.PasswordEditText>
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/btn_login"
         android:layout_width="0dp"
         android:layout_height="64dp"
         android:layout_marginStart="32dp"
@@ -105,6 +105,7 @@
         android:layout_marginEnd="32dp"
         android:backgroundTint="@color/green"
         android:text="@string/login"
+        app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

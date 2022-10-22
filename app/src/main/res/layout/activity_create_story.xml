@@ -6,4 +6,142 @@
     android:layout_height="match_parent"
     tools:context=".presentation.createstory.CreateStoryActivity">
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_img_poster"
+        android:layout_width="0dp"
+        android:layout_height="251dp"
+        android:layout_marginStart="42dp"
+        android:layout_marginEnd="42dp"
+        android:layout_marginBottom="24dp"
+        android:elevation="10dp"
+        app:cardCornerRadius="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/gl_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_img_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:scaleType="centerCrop"
+            android:transitionName="@string/shared_transition"
+            tools:ignore="ContentDescription" />
+
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/iv_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_camera"
+        app:layout_constraintEnd_toStartOf="@+id/iv_gallery"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gl_horizontal"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <TextView
+        android:id="@+id/tv_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/title_camera"
+        app:layout_constraintEnd_toEndOf="@+id/iv_camera"
+        app:layout_constraintStart_toStartOf="@+id/iv_camera"
+        app:layout_constraintTop_toBottomOf="@+id/iv_camera" />
+
+    <ImageView
+        android:id="@+id/iv_gallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_gallery"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_camera"
+        app:layout_constraintTop_toBottomOf="@+id/gl_horizontal" />
+
+    <TextView
+        android:id="@+id/tv_gallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/title_gallery"
+        app:layout_constraintEnd_toEndOf="@+id/iv_gallery"
+        app:layout_constraintStart_toStartOf="@+id/iv_gallery"
+        app:layout_constraintTop_toBottomOf="@+id/iv_gallery" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="64dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_percent="0.45"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_description"
+        android:layout_width="wrap_content"
+        android:layout_height="64dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_percent="0.58"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_description"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="42dp"
+        android:hint="@string/hint_description"
+        android:inputType="textCapSentences|textMultiLine"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gl_description">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/ed_description"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:inputType="textCapSentences|textMultiLine" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_upload"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="42dp"
+        android:backgroundTint="@color/green"
+        android:text="@string/title_upload"
+        app:cornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/til_description"
+        app:textAllCaps="false" />
+
+    <FrameLayout
+        android:id="@+id/progress_bar_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
