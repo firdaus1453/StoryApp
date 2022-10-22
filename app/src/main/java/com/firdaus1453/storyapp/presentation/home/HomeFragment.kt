@@ -43,9 +43,13 @@ class HomeFragment : Fragment() {
         val viewModel: HomeViewModel by viewModels {
             factory
         }
+        setupView(viewModel)
         with(viewModel) {
             observe(stories, ::storiesStateView)
         }
+    }
+
+    private fun setupView(viewModel: HomeViewModel) {
         binding.sfHome.setOnRefreshListener {
             viewModel.getStories()
             binding.sfHome.isRefreshing = false
