@@ -64,8 +64,13 @@ class HomeFragment : Fragment() {
     private fun storiesStateView(result: Result<List<Stories>?>) {
         when (result) {
             is Result.Success -> {
-                adapter.submitList(result.data)
-                binding.rvStories.adapter = adapter
+                if (listOf<Stories>().isNotEmpty() == true) {
+                    stateDataIsNotEmpty()
+                    adapter.submitList(result.data)
+                    binding.rvStories.adapter = adapter
+                } else {
+                    stateDataIsEmpty()
+                }
                 binding.progressBarContainer.visibility = View.GONE
             }
 
@@ -78,6 +83,20 @@ class HomeFragment : Fragment() {
             Result.Loading -> {
                 binding.progressBarContainer.visibility = View.VISIBLE
             }
+        }
+    }
+
+    fun stateDataIsEmpty() {
+        binding.apply {
+            groupContent.visibility = View.GONE
+            groupEmptyData.visibility = View.VISIBLE
+        }
+    }
+
+    fun stateDataIsNotEmpty() {
+        binding.apply {
+            groupContent.visibility = View.VISIBLE
+            groupEmptyData.visibility = View.GONE
         }
     }
 

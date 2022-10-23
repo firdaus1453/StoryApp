@@ -35,4 +35,5 @@
     <string name="title_gallery">Gallery</string>
     <string name="hint_description">Your story…</string>
     <string name="title_upload">Upload</string>
+    <string name="error_valid_email">Enter valid Email address</string>
 </resources>

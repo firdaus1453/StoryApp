@@ -36,4 +36,5 @@
     <string name="title_gallery">Gallery</string>
     <string name="hint_description">Ceritakan cerita mu…</string>
     <string name="title_upload">Unggah</string>
+    <string name="error_valid_email">Masukkan format email yang benar</string>
 </resources>

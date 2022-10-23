@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Patterns
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -113,6 +114,9 @@ class LoginActivity : AppCompatActivity() {
             when {
                 email.isEmpty() -> {
                     binding.emailEditTextLayout.error = getString(R.string.error_fill_email)
+                }
+                !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                    binding.emailEditTextLayout.error = getString(R.string.error_valid_email)
                 }
                 password.isEmpty() -> {
                     binding.passwordEditTextLayout.error = getString(R.string.error_fill_password)

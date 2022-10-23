@@ -44,7 +44,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/messageTextView" />
 
-    <com.google.android.material.textfield.TextInputLayout
+    <com.firdaus1453.storyapp.util.EmailEditText
         android:id="@+id/emailEditTextLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
@@ -62,7 +62,7 @@
             android:ems="10"
             android:inputType="textEmailAddress"
             tools:ignore="SpeakableTextPresentCheck" />
-    </com.google.android.material.textfield.TextInputLayout>
+    </com.firdaus1453.storyapp.util.EmailEditText>
 
     <TextView
         android:id="@+id/passwordTextView"
