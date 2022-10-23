@@ -141,6 +141,7 @@ class CreateStoryActivity : AppCompatActivity() {
                 return
             }
             else -> {
+                binding.progressBarContainer.visibility = View.VISIBLE
                 val file = reduceFileImage(getFile as File)
 
                 val description =
