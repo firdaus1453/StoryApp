@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.firdaus1453.storyapp.data.Result
 import com.firdaus1453.storyapp.data.StoryRepository
 import com.firdaus1453.storyapp.data.remote.response.Stories
+import com.google.gson.Gson
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val storyRepository: StoryRepository) : ViewModel() {
@@ -14,26 +16,33 @@ class HomeViewModel(private val storyRepository: StoryRepository) : ViewModel() 
     private val _stories = MutableLiveData<Result<List<Stories>?>>()
     val stories: LiveData<Result<List<Stories>?>> = _stories
 
-    private var token: String = ""
+    private val _notLogin = MutableLiveData<String>()
+    val notLogin: LiveData<String> = _notLogin
 
-    init {
-        getStories()
-    }
-
-    fun getStories() {
-        getToken()
+    fun getStories(token: String) {
         viewModelScope.launch {
             storyRepository.getStories(token).collect {
                 _stories.value = it
             }
+
+            when (val dataStories = _stories.value) {
+                is Result.Success -> {
+                    if (dataStories.data?.isNotEmpty() == true) {
+                        val jsonString = Gson().toJson(dataStories.data)
+                        storyRepository.saveStories(jsonString)
+                    }
+                }
+                else -> {
+                    // not use
+                }
+            }
         }
+
     }
 
-    private fun getToken() {
+    fun getToken() {
         viewModelScope.launch {
-            storyRepository.getUser().collect {
-                token = it.token
-            }
+            _notLogin.value = storyRepository.getUser().first().token
         }
     }
 }

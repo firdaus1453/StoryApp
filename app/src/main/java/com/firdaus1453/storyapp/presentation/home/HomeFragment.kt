@@ -19,12 +19,14 @@ import com.firdaus1453.storyapp.data.remote.response.Stories
 import com.firdaus1453.storyapp.databinding.FragmentHomeBinding
 import com.firdaus1453.storyapp.presentation.ViewModelFactory
 import com.firdaus1453.storyapp.presentation.detail.DetailActivity
+import com.firdaus1453.storyapp.presentation.login.LoginActivity
 import com.firdaus1453.storyapp.util.observe
+
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
-
+    private lateinit var viewModel: HomeViewModel
     private val binding get() = _binding!!
     private lateinit var adapter: HomeAdapter
 
@@ -40,34 +42,46 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val factory: ViewModelFactory = ViewModelFactory.getInstance(requireActivity())
-        val viewModel: HomeViewModel by viewModels {
+        val mViewModel: HomeViewModel by viewModels {
             factory
         }
-        setupView(viewModel)
+        viewModel = mViewModel
+        setupRecyclerView()
         with(viewModel) {
             observe(stories, ::storiesStateView)
+            observe(notLogin, ::navigateToLogin)
         }
     }
 
-    private fun setupView(viewModel: HomeViewModel) {
-        binding.sfHome.setOnRefreshListener {
-            viewModel.getStories()
-            binding.sfHome.isRefreshing = false
+    private fun navigateToLogin(token: String) {
+        if (token.isEmpty()) {
+            startActivity(Intent(requireContext(), LoginActivity::class.java))
+            requireActivity().finish()
+        } else {
+            viewModel.getStories(token)
+            binding.sfHome.setOnRefreshListener {
+                viewModel.getStories(token)
+                binding.sfHome.isRefreshing = false
+            }
         }
+    }
+
+    private fun setupRecyclerView() {
         adapter = HomeAdapter { iv, id ->
             onItemClicked(iv, id)
         }
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
         binding.rvStories.layoutManager = layoutManager
+        binding.rvStories.adapter = adapter
     }
 
     private fun storiesStateView(result: Result<List<Stories>?>) {
         when (result) {
             is Result.Success -> {
-                if (listOf<Stories>().isNotEmpty() == true) {
+                if (result.data?.isNotEmpty() == true) {
                     stateDataIsNotEmpty()
+                    setupRecyclerView()
                     adapter.submitList(result.data)
-                    binding.rvStories.adapter = adapter
                 } else {
                     stateDataIsEmpty()
                 }
@@ -86,14 +100,14 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun stateDataIsEmpty() {
+    private fun stateDataIsEmpty() {
         binding.apply {
             groupContent.visibility = View.GONE
             groupEmptyData.visibility = View.VISIBLE
         }
     }
 
-    fun stateDataIsNotEmpty() {
+    private fun stateDataIsNotEmpty() {
         binding.apply {
             groupContent.visibility = View.VISIBLE
             groupEmptyData.visibility = View.GONE
@@ -108,6 +122,11 @@ class HomeFragment : Fragment() {
             iv, getString(R.string.shared_transition)
         )
         startActivity(intent, options.toBundle())
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getToken()
     }
 
     override fun onDestroyView() {

@@ -13,10 +13,10 @@ class StartupViewModel(private val storyRepository: StoryRepository) : ViewModel
     val userModel: LiveData<UserModel> = _userModel
 
     init {
-        getToken()
+        getUserData()
     }
 
-    private fun getToken() {
+    private fun getUserData() {
         viewModelScope.launch {
             storyRepository.getUser().collect {
                 _userModel.value = it

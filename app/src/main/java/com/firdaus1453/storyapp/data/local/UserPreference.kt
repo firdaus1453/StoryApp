@@ -1,6 +1,7 @@
 package com.firdaus1453.storyapp.data.local
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -11,23 +12,16 @@ import com.firdaus1453.storyapp.data.local.model.UserModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-
 class UserPreference constructor(private val context: Context) {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATASOURCE_NAME)
 
     fun getUser(): Flow<UserModel> {
         return context.dataStore.data.map { preferences ->
             UserModel(
-                preferences[NAME_KEY] ?:"",
-                preferences[TOKEN_KEY] ?:"",
+                preferences[NAME_KEY] ?: "",
+                preferences[TOKEN_KEY] ?: "",
                 preferences[STATE_KEY] ?: false
             )
-        }
-    }
-
-    fun isLogin(): Flow<Boolean> {
-        return context.dataStore.data.map { preferences ->
-            preferences[STATE_KEY] ?: false
         }
     }
 
@@ -39,10 +33,25 @@ class UserPreference constructor(private val context: Context) {
         }
     }
 
+    suspend fun saveStories(data: String) {
+        Log.d("data", "saveStories: $data")
+        context.dataStore.edit { preferences ->
+            preferences[DATA_KEY] = data
+        }
+    }
+
+    fun getStories(): Flow<String> {
+        return context.dataStore.data.map { preferences ->
+            preferences[DATA_KEY] ?: ""
+        }
+    }
+
+
     suspend fun logout() {
         context.dataStore.edit { preferences ->
             preferences[NAME_KEY] = ""
             preferences[TOKEN_KEY] = ""
+            preferences[DATA_KEY] = ""
             preferences[STATE_KEY] = false
         }
     }
@@ -52,6 +61,7 @@ class UserPreference constructor(private val context: Context) {
         private val NAME_KEY = stringPreferencesKey("name")
         private val TOKEN_KEY = stringPreferencesKey("token")
         private val STATE_KEY = booleanPreferencesKey("state")
+        private val DATA_KEY = stringPreferencesKey("data")
 
         fun getInstance(context: Context): UserPreference {
             var instance: UserPreference? = null

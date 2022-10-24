@@ -14,7 +14,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import com.firdaus1453.storyapp.R
 import com.firdaus1453.storyapp.data.Result
 import com.firdaus1453.storyapp.data.remote.response.FileUploadResponse
@@ -22,7 +21,6 @@ import com.firdaus1453.storyapp.databinding.ActivityCreateStoryBinding
 import com.firdaus1453.storyapp.presentation.ViewModelFactory
 import com.firdaus1453.storyapp.presentation.camera.CameraActivity
 import com.firdaus1453.storyapp.presentation.camera.CameraActivity.Companion.CAMERA_X_RESULT
-import com.firdaus1453.storyapp.presentation.main.MainActivity
 import com.firdaus1453.storyapp.util.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -93,11 +91,9 @@ class CreateStoryActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-
                 binding.progressBarContainer.visibility = View.GONE
+                setResult(RESULT_OK)
+                finish()
             }
 
             is Result.Error -> {

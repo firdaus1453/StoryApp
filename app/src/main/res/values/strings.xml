@@ -36,4 +36,5 @@
     <string name="hint_description">Your story…</string>
     <string name="title_upload">Upload</string>
     <string name="error_valid_email">Enter valid Email address</string>
+    <string name="empty_text">There is not Story yet</string>
 </resources>

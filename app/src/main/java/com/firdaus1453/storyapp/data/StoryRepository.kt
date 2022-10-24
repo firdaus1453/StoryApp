@@ -88,14 +88,20 @@ class StoryRepository(
         return userPreference.getUser()
     }
 
-    fun isLogin() = userPreference.isLogin()
-
     suspend fun saveUser(user: UserModel) {
         userPreference.saveUser(user)
     }
 
     suspend fun logout() {
         userPreference.logout()
+    }
+
+    suspend fun saveStories(stories: String) {
+        userPreference.saveStories(stories)
+    }
+
+    fun getStories(): Flow<String> {
+        return userPreference.getStories()
     }
 
     companion object {
