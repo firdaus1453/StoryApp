@@ -7,7 +7,6 @@ import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import android.media.ExifInterface
 import android.net.Uri
 import android.os.Environment
 import com.firdaus1453.storyapp.R
@@ -99,14 +98,6 @@ fun reduceFileImage(file: File): File {
     bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, FileOutputStream(file))
 
     return file
-}
-
-private fun rotateImage(img: Bitmap, degree: Int): Bitmap? {
-    val matrix = Matrix()
-    matrix.postRotate(degree.toFloat())
-    val rotatedImg = Bitmap.createBitmap(img, 0, 0, img.width, img.height, matrix, true)
-    img.recycle()
-    return rotatedImg
 }
 
 fun bitmapToFile(bitmap:Bitmap, context: Context): File {

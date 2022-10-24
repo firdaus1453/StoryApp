@@ -56,8 +56,4 @@ class HomeAdapter(private val onClickListener: (iv: ImageView, id: String) -> Un
             }
         }
     }
-
-//    class OnClickListener(val onClickListener: (iv: ImageView, id: String) -> Unit) {
-//        fun onClick(iv: ImageView, id: String) = onClickListener(iv, id)
-//    }
 }
