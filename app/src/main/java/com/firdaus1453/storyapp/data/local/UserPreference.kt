@@ -1,7 +1,6 @@
 package com.firdaus1453.storyapp.data.local
 
 import android.content.Context
-import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -34,7 +33,6 @@ class UserPreference constructor(private val context: Context) {
     }
 
     suspend fun saveStories(data: String) {
-        Log.d("data", "saveStories: $data")
         context.dataStore.edit { preferences ->
             preferences[DATA_KEY] = data
         }
