@@ -37,11 +37,6 @@ class CreateStoryActivity : AppCompatActivity() {
     }
     private var getFile: File? = null
 
-    companion object {
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
-        private const val REQUEST_CODE_PERMISSIONS = 10
-    }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -159,6 +154,7 @@ class CreateStoryActivity : AppCompatActivity() {
         launcherIntentCameraX.launch(intent)
     }
 
+    @Suppress("DEPRECATION")
     private val launcherIntentCameraX = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
@@ -203,5 +199,10 @@ class CreateStoryActivity : AppCompatActivity() {
             finish()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        private const val REQUEST_CODE_PERMISSIONS = 10
     }
 }
