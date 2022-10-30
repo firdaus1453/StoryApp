@@ -16,27 +16,13 @@ class CreateStoryViewModel(private val storyRepository: StoryRepository) : ViewM
     private val _addNewStory = MutableLiveData<Result<FileUploadResponse?>>()
     val addNewStory: LiveData<Result<FileUploadResponse?>> = _addNewStory
 
-    private var token: String = ""
-
-    init {
-        getToken()
-    }
-
     fun addNewStory(
         file: MultipartBody.Part,
         description: RequestBody
     ) {
         viewModelScope.launch {
-            storyRepository.addNewStory(token, file, description).collect {
+            storyRepository.addNewStory(file, description).collect {
                 _addNewStory.value = it
-            }
-        }
-    }
-
-    private fun getToken() {
-        viewModelScope.launch {
-            storyRepository.getUser().collect {
-                token = it.token
             }
         }
     }

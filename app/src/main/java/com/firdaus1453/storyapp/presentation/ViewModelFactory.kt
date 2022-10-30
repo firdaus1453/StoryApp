@@ -4,17 +4,18 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.firdaus1453.storyapp.data.StoryRepository
-import com.firdaus1453.storyapp.presentation.login.LoginViewModel
-import com.firdaus1453.storyapp.presentation.signup.SignupViewModel
 import com.firdaus1453.storyapp.di.Injection
 import com.firdaus1453.storyapp.presentation.createstory.CreateStoryViewModel
 import com.firdaus1453.storyapp.presentation.detail.DetailViewModel
 import com.firdaus1453.storyapp.presentation.home.HomeViewModel
+import com.firdaus1453.storyapp.presentation.login.LoginViewModel
 import com.firdaus1453.storyapp.presentation.profile.ProfileViewModel
+import com.firdaus1453.storyapp.presentation.signup.SignupViewModel
 import com.firdaus1453.storyapp.presentation.startup.StartupViewModel
 
 
-class ViewModelFactory(private val storyRepository: StoryRepository) : ViewModelProvider.NewInstanceFactory() {
+class ViewModelFactory(private val storyRepository: StoryRepository) :
+    ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -45,7 +46,6 @@ class ViewModelFactory(private val storyRepository: StoryRepository) : ViewModel
     }
 
     companion object {
-
         @Volatile
         private var instance: ViewModelFactory? = null
         fun getInstance(context: Context): ViewModelFactory =
