@@ -7,11 +7,11 @@ data class StoriesResponse(
 )
 
 data class Stories(
-    val createdAt: String? = "",
-    val description: String? = "",
     val id: String? = "",
-    val lat: Any? = Any(),
-    val lon: Any? = Any(),
     val name: String? = "",
-    val photoUrl: String? = ""
+    val photoUrl: String? = "",
+    val description: String? = "",
+    val createdAt: String? = "",
+    val lat: Double? = 0.0,
+    val lon: Double? = 0.0
 )

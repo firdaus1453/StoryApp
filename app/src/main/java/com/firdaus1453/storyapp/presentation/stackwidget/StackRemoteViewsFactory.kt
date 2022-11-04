@@ -5,16 +5,18 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Binder
+import android.util.Log
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.bumptech.glide.Glide
 import com.firdaus1453.storyapp.R
+import com.firdaus1453.storyapp.data.Result
 import com.firdaus1453.storyapp.data.StoryRepository
-import com.firdaus1453.storyapp.data.remote.response.Stories
 import com.firdaus1453.storyapp.di.Injection
-import com.google.gson.Gson
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.io.IOException
 
 internal class StackRemoteViewsFactory(private val mContext: Context) :
@@ -22,7 +24,6 @@ internal class StackRemoteViewsFactory(private val mContext: Context) :
 
     private val mWidgetItems = ArrayList<Bitmap>()
     private lateinit var storyRepository: StoryRepository
-
 
     override fun onCreate() {
         storyRepository = Injection.provideRepository(mContext)
@@ -36,27 +37,34 @@ internal class StackRemoteViewsFactory(private val mContext: Context) :
 
     private fun fetchData() {
         mWidgetItems.clear()
-        val storiesS = runBlocking { storyRepository.getStories().first() }
-        if (storiesS.isNotEmpty()) {
-            val stories: List<Stories> =
-                Gson().fromJson(storiesS, Array<Stories>::class.java).asList()
-            stories.forEach {
-                try {
-                    val bitmap = try {
-                        Glide.with(mContext)
-                            .asBitmap()
-                            .load(it.photoUrl)
-                            .submit()
-                            .get()
-                    } catch (e: Exception) {
-                        BitmapFactory.decodeResource(
-                            mContext.resources,
-                            R.drawable.ic_broken_image_black
-                        )
+        CoroutineScope(Dispatchers.IO).launch {
+            storyRepository.getStories().collectLatest { result ->
+                when (result) {
+                    is Result.Success -> {
+                        val stories = result.data
+                        stories?.forEach {
+                            try {
+                                val bitmap = try {
+                                    Glide.with(mContext)
+                                        .asBitmap()
+                                        .load(it.photoUrl)
+                                        .submit()
+                                        .get()
+                                } catch (e: Exception) {
+                                    BitmapFactory.decodeResource(
+                                        mContext.resources,
+                                        R.drawable.ic_broken_image_black
+                                    )
+                                }
+                                mWidgetItems.add(bitmap)
+                            } catch (e: IOException) {
+                                e.printStackTrace()
+                            }
+                        }
                     }
-                    mWidgetItems.add(bitmap)
-                } catch (e: IOException) {
-                    e.printStackTrace()
+                    else -> {
+                        Log.d("Widget", "Error")
+                    }
                 }
             }
         }

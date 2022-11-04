@@ -16,16 +16,16 @@ import com.firdaus1453.storyapp.util.observe
 
 class StartupActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStartupBinding
-    private val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
-    private val viewModel: StartupViewModel by viewModels {
-        factory
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityStartupBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupView()
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
+        val viewModel: StartupViewModel by viewModels {
+            factory
+        }
 
         with(viewModel) {
             observe(userModel, ::checkLogin)

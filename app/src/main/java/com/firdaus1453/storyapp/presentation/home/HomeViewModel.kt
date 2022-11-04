@@ -4,45 +4,31 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.firdaus1453.storyapp.data.Result
+import androidx.paging.PagingData
 import com.firdaus1453.storyapp.data.StoryRepository
-import com.firdaus1453.storyapp.data.remote.response.Stories
-import com.google.gson.Gson
+import com.firdaus1453.storyapp.data.local.room.StoriesEntity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val storyRepository: StoryRepository) : ViewModel() {
 
-    private val _stories = MutableLiveData<Result<List<Stories>?>>()
-    val stories: LiveData<Result<List<Stories>?>> = _stories
+    private val _stories = MutableLiveData<PagingData<StoriesEntity>>()
+    val stories: LiveData<PagingData<StoriesEntity>> = _stories
 
-    private val _notLogin = MutableLiveData<String>()
-    val notLogin: LiveData<String> = _notLogin
+    private val _notLogin = MutableLiveData<Boolean>()
+    val notLogin: LiveData<Boolean> = _notLogin
 
-    fun getStories(token: String) {
+    fun getStories() {
         viewModelScope.launch {
-            storyRepository.getStories(token).collect {
+            storyRepository.getPagingStories().collect {
                 _stories.value = it
             }
-
-            when (val dataStories = _stories.value) {
-                is Result.Success -> {
-                    if (dataStories.data?.isNotEmpty() == true) {
-                        val jsonString = Gson().toJson(dataStories.data)
-                        storyRepository.saveStories(jsonString)
-                    }
-                }
-                else -> {
-                    // not use
-                }
-            }
         }
-
     }
 
     fun getToken() {
         viewModelScope.launch {
-            _notLogin.value = storyRepository.getUser().first().token
+            _notLogin.value = storyRepository.getUser().first().isLogin
         }
     }
 }

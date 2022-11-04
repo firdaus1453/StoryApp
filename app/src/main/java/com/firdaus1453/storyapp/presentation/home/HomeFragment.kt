@@ -7,21 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
-import android.widget.Toast.LENGTH_SHORT
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firdaus1453.storyapp.R
-import com.firdaus1453.storyapp.data.Result
-import com.firdaus1453.storyapp.data.remote.response.Stories
+import com.firdaus1453.storyapp.data.local.room.StoriesEntity
 import com.firdaus1453.storyapp.databinding.FragmentHomeBinding
 import com.firdaus1453.storyapp.presentation.ViewModelFactory
 import com.firdaus1453.storyapp.presentation.detail.DetailActivity
 import com.firdaus1453.storyapp.presentation.login.LoginActivity
 import com.firdaus1453.storyapp.util.observe
-
 
 class HomeFragment : Fragment() {
 
@@ -51,18 +50,19 @@ class HomeFragment : Fragment() {
             observe(stories, ::storiesStateView)
             observe(notLogin, ::navigateToLogin)
         }
+        setupRecyclerView()
+        binding.sfHome.setOnRefreshListener {
+            viewModel.getStories()
+            binding.sfHome.isRefreshing = false
+        }
     }
 
-    private fun navigateToLogin(token: String) {
-        if (token.isEmpty()) {
+    private fun navigateToLogin(isLogin: Boolean) {
+        if (isLogin) {
+            viewModel.getStories()
+        } else {
             startActivity(Intent(requireContext(), LoginActivity::class.java))
             requireActivity().finish()
-        } else {
-            viewModel.getStories(token)
-            binding.sfHome.setOnRefreshListener {
-                viewModel.getStories(token)
-                binding.sfHome.isRefreshing = false
-            }
         }
     }
 
@@ -72,46 +72,48 @@ class HomeFragment : Fragment() {
         }
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
         binding.rvStories.layoutManager = layoutManager
+        adapter.addLoadStateListener { state ->
+            stateLoading(state.refresh is LoadState.Loading)
+            val errorState = state.source.append as? LoadState.Error
+                ?: state.source.prepend as? LoadState.Error
+                ?: state.append as? LoadState.Error
+                ?: state.prepend as? LoadState.Error
+
+            /*val errorFirst = state.refresh is LoadState.Error
+            if (errorFirst) {
+                Toast.makeText(requireContext(), getString(R.string.fail_loading), LENGTH_SHORT)
+                    .show()
+            } else {
+                binding.progressBarContainer.visibility = View.GONE
+            }*/
+
+            if (errorState != null) {
+                Toast.makeText(requireContext(), errorState.error.message, Toast.LENGTH_LONG).show()
+            }
+
+            if (state.source.refresh is LoadState.NotLoading && state.append.endOfPaginationReached) {
+                if (adapter.itemCount < 1) {
+                    isEmptyData(true)
+                } else {
+                    isEmptyData(false)
+                }
+            }
+        }
         binding.rvStories.adapter = adapter
     }
 
-    private fun storiesStateView(result: Result<List<Stories>?>) {
-        when (result) {
-            is Result.Success -> {
-                if (result.data?.isNotEmpty() == true) {
-                    stateDataIsNotEmpty()
-                    setupRecyclerView()
-                    adapter.submitList(result.data)
-                } else {
-                    stateDataIsEmpty()
-                }
-                binding.progressBarContainer.visibility = View.GONE
-            }
-
-            is Result.Error -> {
-                Toast.makeText(requireContext(), getString(R.string.fail_loading), LENGTH_SHORT)
-                    .show()
-                binding.progressBarContainer.visibility = View.GONE
-            }
-
-            Result.Loading -> {
-                binding.progressBarContainer.visibility = View.VISIBLE
-            }
-        }
+    private fun storiesStateView(data: PagingData<StoriesEntity>) {
+        adapter.submitData(lifecycle, data)
     }
 
-    private fun stateDataIsEmpty() {
-        binding.apply {
-            groupContent.visibility = View.GONE
-            groupEmptyData.visibility = View.VISIBLE
-        }
+    private fun isEmptyData(isEmpty: Boolean) {
+        binding.groupEmptyData.visibility = if (isEmpty) View.VISIBLE else View.GONE
+        binding.groupContent.visibility = if (isEmpty) View.GONE else View.VISIBLE
     }
 
-    private fun stateDataIsNotEmpty() {
-        binding.apply {
-            groupContent.visibility = View.VISIBLE
-            groupEmptyData.visibility = View.GONE
-        }
+    private fun stateLoading(isLoading: Boolean) {
+        binding.progressBarContainer.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.groupContent.visibility = if (isLoading) View.GONE else View.VISIBLE
     }
 
     private fun onItemClicked(iv: ImageView, id: String) {

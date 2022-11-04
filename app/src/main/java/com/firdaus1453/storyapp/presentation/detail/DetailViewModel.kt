@@ -14,24 +14,10 @@ class DetailViewModel(private val storyRepository: StoryRepository) : ViewModel(
     private val _story = MutableLiveData<Result<Story?>>()
     val story: LiveData<Result<Story?>> = _story
 
-    private var token: String = ""
-
-    init {
-        getToken()
-    }
-
     fun getDetailStory(id: String) {
         viewModelScope.launch {
-            storyRepository.getDetailStory(token, id).collect {
+            storyRepository.getDetailStory(id).collect {
                 _story.value = it
-            }
-        }
-    }
-
-    private fun getToken() {
-        viewModelScope.launch {
-            storyRepository.getUser().collect {
-                token = it.token
             }
         }
     }
