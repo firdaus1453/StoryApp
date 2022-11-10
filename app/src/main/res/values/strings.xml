@@ -37,6 +37,8 @@
     <string name="title_upload">Upload</string>
     <string name="error_valid_email">Enter valid Email address</string>
     <string name="empty_text">There is not Story yet</string>
+    <string name="title_map">Map</string>
+    <string name="error_loading">Fail to load, please try again</string>
 
     // Desc
     <string name="desc_switch_camera">switch camera</string>

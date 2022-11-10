@@ -51,7 +51,7 @@ class DetailActivity : AppCompatActivity() {
 
             is Result.Error -> {
                 Toast.makeText(
-                    this, "Gagal memuat, silahkan coba lagi",
+                    this, getString(R.string.error_loading),
                     Toast.LENGTH_SHORT
                 )
                     .show()
@@ -81,7 +81,7 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == ResourceAndroid.id.home) {
-            finish()
+            onBackPressedDispatcher.onBackPressed()
         }
         return super.onOptionsItemSelected(item)
     }

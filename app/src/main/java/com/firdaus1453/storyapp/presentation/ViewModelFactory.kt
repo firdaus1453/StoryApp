@@ -9,6 +9,7 @@ import com.firdaus1453.storyapp.presentation.createstory.CreateStoryViewModel
 import com.firdaus1453.storyapp.presentation.detail.DetailViewModel
 import com.firdaus1453.storyapp.presentation.home.HomeViewModel
 import com.firdaus1453.storyapp.presentation.login.LoginViewModel
+import com.firdaus1453.storyapp.presentation.map.MapViewModel
 import com.firdaus1453.storyapp.presentation.profile.ProfileViewModel
 import com.firdaus1453.storyapp.presentation.signup.SignupViewModel
 import com.firdaus1453.storyapp.presentation.startup.StartupViewModel
@@ -40,6 +41,9 @@ class ViewModelFactory(private val storyRepository: StoryRepository) :
             }
             modelClass.isAssignableFrom(StartupViewModel::class.java) -> {
                 StartupViewModel(storyRepository) as T
+            }
+            modelClass.isAssignableFrom(MapViewModel::class.java) -> {
+                MapViewModel(storyRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
