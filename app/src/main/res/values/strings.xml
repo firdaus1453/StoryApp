@@ -43,4 +43,5 @@
     // Desc
     <string name="desc_switch_camera">switch camera</string>
     <string name="desc_capture">capture</string>
+    <string name="message_permission_failed">permission not available</string>
 </resources>

@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
@@ -22,6 +23,8 @@ import com.firdaus1453.storyapp.presentation.ViewModelFactory
 import com.firdaus1453.storyapp.presentation.camera.CameraActivity
 import com.firdaus1453.storyapp.presentation.camera.CameraActivity.Companion.CAMERA_X_RESULT
 import com.firdaus1453.storyapp.util.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -32,10 +35,13 @@ import java.io.File
 class CreateStoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreateStoryBinding
     private val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val viewModel: CreateStoryViewModel by viewModels {
         factory
     }
     private var getFile: File? = null
+    private var lat: Float? = null
+    private var lon: Float? = null
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -70,7 +76,9 @@ class CreateStoryActivity : AppCompatActivity() {
                 REQUEST_CODE_PERMISSIONS
             )
         }
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         setupView()
+        getMyLastLocation()
 
         with(viewModel) {
             observe(addNewStory, ::addNewStoryViewState)
@@ -114,6 +122,60 @@ class CreateStoryActivity : AppCompatActivity() {
         binding.btnUpload.setOnClickListener { uploadImage() }
     }
 
+    private fun getMyLastLocation() {
+        if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
+            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+        ) {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    lat = location.latitude.toFloat()
+                    lon = location.longitude.toFloat()
+                } else {
+                    Toast.makeText(
+                        this,
+                        "Location is not found. Try Again",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        } else {
+            requestPermissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
+    }
+
+    private fun checkPermission(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            permission
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            when {
+                permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false -> {
+                    getMyLastLocation()
+                }
+                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false -> {
+                    getMyLastLocation()
+                }
+                else -> {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.message_permission_failed),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+
     private fun uploadImage() {
         when {
             getFile == null -> {
@@ -144,7 +206,7 @@ class CreateStoryActivity : AppCompatActivity() {
                     requestImageFile
                 )
 
-                viewModel.addNewStory(imageMultipart, description)
+                viewModel.addNewStory(imageMultipart, description, lat, lon)
             }
         }
     }

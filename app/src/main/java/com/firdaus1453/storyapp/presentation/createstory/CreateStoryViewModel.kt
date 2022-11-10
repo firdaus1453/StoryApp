@@ -18,10 +18,12 @@ class CreateStoryViewModel(private val storyRepository: StoryRepository) : ViewM
 
     fun addNewStory(
         file: MultipartBody.Part,
-        description: RequestBody
+        description: RequestBody,
+        lat: Float?,
+        lon: Float?,
     ) {
         viewModelScope.launch {
-            storyRepository.addNewStory(file, description).collect {
+            storyRepository.addNewStory(file, description, lat, lon).collect {
                 _addNewStory.value = it
             }
         }

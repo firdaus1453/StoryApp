@@ -19,8 +19,10 @@ import com.firdaus1453.storyapp.data.remote.response.Story
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class StoryRepository(
     private val apiService: ApiService,
@@ -40,12 +42,21 @@ class StoryRepository(
 
     fun addNewStory(
         file: MultipartBody.Part,
-        description: RequestBody
+        description: RequestBody,
+        lat: Float?,
+        lon: Float?
     ): Flow<Result<FileUploadResponse?>> = flow {
         emit(Result.Loading)
+        var latRequestBody: RequestBody? = null
+        var lonRequestBody: RequestBody? = null
         try {
+            if (lat != null && lon != null) {
+                latRequestBody = lat.toString().toRequestBody("text/plain".toMediaType())
+                lonRequestBody = lon.toString().toRequestBody("text/plain".toMediaType())
+            }
             val token = "Bearer " + userPreference.getToken().first()
-            val response = apiService.addNewStory(token, file, description)
+            val response =
+                apiService.addNewStory(token, file, description, latRequestBody, lonRequestBody)
             emit(Result.Success(response))
         } catch (e: Exception) {
             Log.d("StoryRepository", "addNewStory: ${e.message.toString()} ")
