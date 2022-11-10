@@ -84,7 +84,7 @@
             android:id="@+id/group_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:constraint_referenced_ids="tv_title_brand,rv_stories" />
+            app:constraint_referenced_ids="rv_stories, iv_map" />
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/group_empty_data"

@@ -29,6 +29,7 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
     private val binding get() = _binding!!
     private lateinit var adapter: HomeAdapter
+    private var isNewData = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,6 +52,7 @@ class HomeFragment : Fragment() {
             observe(notLogin, ::navigateToLogin)
         }
         setupRecyclerView()
+        setupPaging()
         binding.sfHome.setOnRefreshListener {
             viewModel.getStories()
             binding.sfHome.isRefreshing = false
@@ -60,21 +62,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun navigateToLogin(isLogin: Boolean) {
-        if (isLogin) {
-            viewModel.getStories()
-        } else {
-            startActivity(Intent(requireContext(), LoginActivity::class.java))
-            requireActivity().finish()
-        }
-    }
-
-    private fun setupRecyclerView() {
-        adapter = HomeAdapter { iv, id ->
-            onItemClicked(iv, id)
-        }
-        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
-        binding.rvStories.layoutManager = layoutManager
+    private fun setupPaging() {
         adapter.addLoadStateListener { state ->
             stateLoading(state.refresh is LoadState.Loading)
             val errorState = state.source.append as? LoadState.Error
@@ -94,6 +82,31 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
+        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                if (positionStart == 0) {
+                    binding.rvStories.smoothScrollToPosition(0)
+                }
+            }
+        })
+    }
+
+    private fun navigateToLogin(isLogin: Boolean) {
+        if (isLogin) {
+            viewModel.getStories()
+        } else {
+            startActivity(Intent(requireContext(), LoginActivity::class.java))
+            requireActivity().finish()
+        }
+    }
+
+    private fun setupRecyclerView() {
+        adapter = HomeAdapter { iv, id ->
+            onItemClicked(iv, id)
+        }
+        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
+        binding.rvStories.layoutManager = layoutManager
         binding.rvStories.adapter = adapter
     }
 
