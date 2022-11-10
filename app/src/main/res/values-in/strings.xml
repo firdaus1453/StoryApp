@@ -38,6 +38,8 @@
     <string name="title_upload">Unggah</string>
     <string name="error_valid_email">Masukkan format email yang benar</string>
     <string name="empty_text">Saat ini belum ada Story</string>
+    <string name="title_map">Peta</string>
+    <string name="error_loading">Gagal memuat, silahkan coba lagi</string>
 
     // Desc
     <string name="desc_switch_camera">switch camera</string>

@@ -20,6 +20,7 @@ import com.firdaus1453.storyapp.databinding.FragmentHomeBinding
 import com.firdaus1453.storyapp.presentation.ViewModelFactory
 import com.firdaus1453.storyapp.presentation.detail.DetailActivity
 import com.firdaus1453.storyapp.presentation.login.LoginActivity
+import com.firdaus1453.storyapp.presentation.map.MapActivity
 import com.firdaus1453.storyapp.util.observe
 
 class HomeFragment : Fragment() {
@@ -45,7 +46,6 @@ class HomeFragment : Fragment() {
             factory
         }
         viewModel = mViewModel
-        setupRecyclerView()
         with(viewModel) {
             observe(stories, ::storiesStateView)
             observe(notLogin, ::navigateToLogin)
@@ -54,6 +54,9 @@ class HomeFragment : Fragment() {
         binding.sfHome.setOnRefreshListener {
             viewModel.getStories()
             binding.sfHome.isRefreshing = false
+        }
+        binding.ivMap.setOnClickListener {
+            startActivity(Intent(requireContext(), MapActivity::class.java))
         }
     }
 
@@ -78,14 +81,6 @@ class HomeFragment : Fragment() {
                 ?: state.source.prepend as? LoadState.Error
                 ?: state.append as? LoadState.Error
                 ?: state.prepend as? LoadState.Error
-
-            /*val errorFirst = state.refresh is LoadState.Error
-            if (errorFirst) {
-                Toast.makeText(requireContext(), getString(R.string.fail_loading), LENGTH_SHORT)
-                    .show()
-            } else {
-                binding.progressBarContainer.visibility = View.GONE
-            }*/
 
             if (errorState != null) {
                 Toast.makeText(requireContext(), errorState.error.message, Toast.LENGTH_LONG).show()
