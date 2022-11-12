@@ -67,12 +67,19 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 if (result.data?.isNotEmpty() == true) {
                     for (x in result.data) {
                         if (x.lat != 0.0 && x.lon != 0.0) {
-                            val latLng = LatLng(x.lat ?: 0.0, x.lon ?: 0.0)
+                            val latLng = x.lat?.let { x.lon?.let { it1 -> LatLng(it, it1) } }
                             val addressName = getAddressName(x.lat ?: 0.0, x.lon ?: 0.0)
-                            mMap.addMarker(
-                                MarkerOptions().position(latLng).title(x.name).snippet(addressName)
-                            )
-                            boundsBuilder.include(latLng)
+                            latLng?.let {
+                                MarkerOptions().position(it).title(x.name).snippet(addressName)
+                            }
+                                ?.let {
+                                    mMap.addMarker(
+                                        it
+                                    )
+                                }
+                            if (latLng != null) {
+                                boundsBuilder.include(latLng)
+                            }
                         }
                     }
 

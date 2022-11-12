@@ -5,8 +5,9 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.firdaus1453.storyapp.data.local.UserPreference
 import com.firdaus1453.storyapp.data.local.model.UserModel
+import com.firdaus1453.storyapp.data.local.pref.UserPreference
+import com.firdaus1453.storyapp.data.local.room.StoriesDao
 import com.firdaus1453.storyapp.data.local.room.StoriesEntity
 import com.firdaus1453.storyapp.data.local.room.StoryDatabase
 import com.firdaus1453.storyapp.data.remote.ApiService
@@ -20,13 +21,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 
 class StoryRepository(
     private val apiService: ApiService,
     private val storyDatabase: StoryDatabase,
+    private val dao: StoriesDao,
     private val userPreference: UserPreference
 ) {
     @OptIn(ExperimentalPagingApi::class)
@@ -35,14 +40,14 @@ class StoryRepository(
             config = PagingConfig(pageSize = 10),
             remoteMediator = StoriesRemoteMediator(apiService, storyDatabase, userPreference),
             pagingSourceFactory = {
-                storyDatabase.storiesDao().getAllStories()
+                dao.getAllStories()
             }
         ).flow
     }
 
     fun addNewStory(
-        file: MultipartBody.Part,
-        description: RequestBody,
+        file: File,
+        description: String,
         lat: Float?,
         lon: Float?
     ): Flow<Result<FileUploadResponse?>> = flow {
@@ -54,9 +59,23 @@ class StoryRepository(
                 latRequestBody = lat.toString().toRequestBody("text/plain".toMediaType())
                 lonRequestBody = lon.toString().toRequestBody("text/plain".toMediaType())
             }
+            val mDescription =
+                description.toRequestBody("text/plain".toMediaType())
+            val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+            val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
+                "photo",
+                file.name,
+                requestImageFile
+            )
             val token = "Bearer " + userPreference.getToken().first()
             val response =
-                apiService.addNewStory(token, file, description, latRequestBody, lonRequestBody)
+                apiService.addNewStory(
+                    token,
+                    imageMultipart,
+                    mDescription,
+                    latRequestBody,
+                    lonRequestBody
+                )
             emit(Result.Success(response))
         } catch (e: Exception) {
             Log.d("StoryRepository", "addNewStory: ${e.message.toString()} ")
@@ -133,10 +152,11 @@ class StoryRepository(
         fun getInstance(
             apiService: ApiService,
             storyDatabase: StoryDatabase,
+            storiesDao: StoriesDao,
             userPreference: UserPreference
         ): StoryRepository =
             instance ?: synchronized(this) {
-                instance ?: StoryRepository(apiService, storyDatabase, userPreference)
+                instance ?: StoryRepository(apiService, storyDatabase, storiesDao, userPreference)
             }.also { instance = it }
     }
 }

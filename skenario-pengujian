@@ -1,0 +1,136 @@
+1. HomeViewModel
+    a. Ketika berhasil memuat data stories.
+
+        Memastikan data tidak null.
+
+        Memastikan data yang di ambil sesuai dengan data yang di inginkan.
+
+        Memastikan jumlah data sesuai dengan yang diharapkan.
+
+    b. Ketika memuat data yang kosong.
+
+        Memastikan data yang di ambil kosong.
+
+        Memastikan jumlah data adalah kosong.
+
+2. CreateStoryViewModel
+    a. Ketika berhasil upload story
+
+       Memastikan result yang di dapatkan adalah Succes
+
+       Memastikan response yang di dapat tidak null
+
+       Memastikan message success sesuai
+
+    b. Ketika gagal upload story
+
+       Memastikan result yang di dapatkan adalah Error
+
+       Memastikan response yang di dapat tidak null
+
+       Memastikan message error sesuai
+
+3. DetailViewModel
+    a. Ketika berhasil memuat data detail story
+
+       Memastikan result yang di dapatkan adalah Success
+
+       Memastikan response yang di dapat tidak null
+
+       Memastikan data response success sesuai
+
+    b. Ketika gagal memuat data detail story
+
+       Memastikan result yang di dapatkan adalah Error
+
+       Memastikan response yang di dapat tidak null
+
+       Memastikan message error sesuai
+
+4. LoginViewModel
+    a. Ketika berhasil login
+
+       Memastikan result yang di dapatkan adalah Success
+
+       Memastikan response yang di dapat tidak null
+
+       Memastikan data response success sesuai
+
+    b. Ketika gagal login
+
+       Memastikan result yang di dapatkan adalah Error
+
+       Memastikan response yang di dapat tidak null
+
+       Memastikan message error sesuai
+
+    c. Ketika berhasil save data user
+
+       Memastikan save data user berhasil
+
+5. MapViewModel
+    a. Ketika berhasil get story
+
+       Memastikan result yang di dapatkan adalah Success
+
+       Memastikan response yang di dapat tidak null
+
+       Memastikan jumlah data response success sesuai
+
+    b. Ketika gagal get story
+
+       Memastikan result yang di dapatkan adalah Error
+
+       Memastikan response yang di dapat tidak null
+
+       Memastikan message error sesuai
+
+6. ProfileViewModel
+    a. Ketika berhasil get user name
+
+       Memastikan data yang di dapat tidak null
+
+       Memastikan data yang di dapat sesuai
+
+    b. Ketika gagal get user name
+
+       Memastikan data yang di dapat tidak null
+
+       Memastikan data yang di dapat sesuai
+
+    c. Ketika berhasil logout
+
+       Memastikan logout berhasil
+
+7. SignupViewModel
+    a. Ketika berhasil sign up
+
+       Memastikan result yang di dapatkan adalah Success
+
+       Memastikan response yang di dapat tidak null
+
+       Memastikan data response success sesuai
+
+    b. Ketika gagal sign up
+
+       Memastikan result yang di dapatkan adalah Error
+
+       Memastikan response yang di dapat tidak null
+
+       Memastikan message error sesuai
+
+8. StartupViewModel
+    a. Ketika berhasil check user sudah login
+
+       Memastikan data yang di dapat tidak null
+
+       Memastikan value isLogin adalah true
+
+    b. Ketika berhasil check user belum login
+
+       Memastikan data yang di dapat tidak null
+
+       Memastikan value isLogin adalah false
+
+
+

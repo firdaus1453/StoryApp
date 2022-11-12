@@ -8,8 +8,7 @@ import com.firdaus1453.storyapp.data.Result
 import com.firdaus1453.storyapp.data.StoryRepository
 import com.firdaus1453.storyapp.data.remote.response.FileUploadResponse
 import kotlinx.coroutines.launch
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import java.io.File
 
 class CreateStoryViewModel(private val storyRepository: StoryRepository) : ViewModel() {
 
@@ -17,8 +16,8 @@ class CreateStoryViewModel(private val storyRepository: StoryRepository) : ViewM
     val addNewStory: LiveData<Result<FileUploadResponse?>> = _addNewStory
 
     fun addNewStory(
-        file: MultipartBody.Part,
-        description: RequestBody,
+        file: File,
+        description: String,
         lat: Float?,
         lon: Float?,
     ) {

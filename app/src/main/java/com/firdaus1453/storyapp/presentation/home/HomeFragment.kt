@@ -19,7 +19,6 @@ import com.firdaus1453.storyapp.data.local.room.StoriesEntity
 import com.firdaus1453.storyapp.databinding.FragmentHomeBinding
 import com.firdaus1453.storyapp.presentation.ViewModelFactory
 import com.firdaus1453.storyapp.presentation.detail.DetailActivity
-import com.firdaus1453.storyapp.presentation.login.LoginActivity
 import com.firdaus1453.storyapp.presentation.map.MapActivity
 import com.firdaus1453.storyapp.util.observe
 
@@ -29,7 +28,6 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
     private val binding get() = _binding!!
     private lateinit var adapter: HomeAdapter
-    private var isNewData = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,7 +47,6 @@ class HomeFragment : Fragment() {
         viewModel = mViewModel
         with(viewModel) {
             observe(stories, ::storiesStateView)
-            observe(notLogin, ::navigateToLogin)
         }
         setupRecyclerView()
         setupPaging()
@@ -69,6 +66,15 @@ class HomeFragment : Fragment() {
                 ?: state.source.prepend as? LoadState.Error
                 ?: state.append as? LoadState.Error
                 ?: state.prepend as? LoadState.Error
+
+            val errorFirst = state.refresh is LoadState.Error
+            if (errorFirst) {
+                val message = state.refresh as LoadState.Error
+                isEmptyData(true)
+                binding.tvTitleInfo.text = message.error.message.toString()
+            } else {
+                isEmptyData(false)
+            }
 
             if (errorState != null) {
                 Toast.makeText(requireContext(), errorState.error.message, Toast.LENGTH_LONG).show()
@@ -90,15 +96,6 @@ class HomeFragment : Fragment() {
                 }
             }
         })
-    }
-
-    private fun navigateToLogin(isLogin: Boolean) {
-        if (isLogin) {
-            viewModel.getStories()
-        } else {
-            startActivity(Intent(requireContext(), LoginActivity::class.java))
-            requireActivity().finish()
-        }
     }
 
     private fun setupRecyclerView() {
@@ -136,7 +133,7 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.getToken()
+        viewModel.getStories()
     }
 
     override fun onDestroyView() {

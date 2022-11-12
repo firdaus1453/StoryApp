@@ -8,11 +8,6 @@ import com.firdaus1453.storyapp.data.StoryRepository
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(private val storyRepository: StoryRepository) : ViewModel() {
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is profile Fragment"
-    }
-    val text: LiveData<String> = _text
-
     private val _nameUser = MutableLiveData<String>()
     val nameUser: LiveData<String> = _nameUser
 
@@ -28,7 +23,7 @@ class ProfileViewModel(private val storyRepository: StoryRepository) : ViewModel
 
     private fun getNameUser() {
         viewModelScope.launch {
-            storyRepository.getUser().collect{
+            storyRepository.getUser().collect {
                 _nameUser.value = it.name
             }
         }

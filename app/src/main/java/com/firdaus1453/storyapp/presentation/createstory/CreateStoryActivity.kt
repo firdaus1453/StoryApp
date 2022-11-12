@@ -25,11 +25,6 @@ import com.firdaus1453.storyapp.presentation.camera.CameraActivity.Companion.CAM
 import com.firdaus1453.storyapp.util.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 class CreateStoryActivity : AppCompatActivity() {
@@ -196,17 +191,8 @@ class CreateStoryActivity : AppCompatActivity() {
             else -> {
                 binding.progressBarContainer.visibility = View.VISIBLE
                 val file = reduceFileImage(getFile as File)
-
-                val description =
-                    binding.edDescription.text.toString().toRequestBody("text/plain".toMediaType())
-                val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-                val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
-                    "photo",
-                    file.name,
-                    requestImageFile
-                )
-
-                viewModel.addNewStory(imageMultipart, description, lat, lon)
+                val description = binding.edDescription.text.toString()
+                viewModel.addNewStory(file, description, lat, lon)
             }
         }
     }

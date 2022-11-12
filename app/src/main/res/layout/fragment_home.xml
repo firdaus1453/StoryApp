@@ -63,18 +63,17 @@
             android:layout_width="200dp"
             android:layout_height="160dp"
             android:src="@drawable/image_data_empty"
-            app:layout_constraintBottom_toTopOf="@+id/tv_title_data_empty"
+            app:layout_constraintBottom_toTopOf="@+id/tv_title_info"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
-            android:id="@+id/tv_title_data_empty"
+            android:id="@+id/tv_title_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Data is Empty"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/iv_image_data_empty"
             app:layout_constraintStart_toStartOf="@+id/iv_image_data_empty"
@@ -91,6 +90,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
-            app:constraint_referenced_ids="iv_image_data_empty,tv_title_data_empty" />
+            app:constraint_referenced_ids="iv_image_data_empty,tv_title_info" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

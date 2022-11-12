@@ -1,4 +1,4 @@
-package com.firdaus1453.storyapp.data.local
+package com.firdaus1453.storyapp.data.local.pref
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -37,19 +37,6 @@ class UserPreference constructor(private val context: Context) {
             preferences[STATE_KEY] = true
         }
     }
-
-    suspend fun saveStories(data: String) {
-        context.dataStore.edit { preferences ->
-            preferences[DATA_KEY] = data
-        }
-    }
-
-    fun getStories(): Flow<String> {
-        return context.dataStore.data.map { preferences ->
-            preferences[DATA_KEY] ?: ""
-        }
-    }
-
 
     suspend fun logout() {
         context.dataStore.edit { preferences ->
