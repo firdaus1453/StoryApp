@@ -1,3 +1,4 @@
+Skenario pengujian Unit Test
 1. HomeViewModel
     a. Ketika berhasil memuat data stories.
 
@@ -132,5 +133,21 @@
 
        Memastikan value isLogin adalah false
 
+Skenario Pengujian Instrument Test (Large Test)
+1. MainActivity
+    a. Menampilkan semua story.
 
+       Memastikan RecyclerView untuk data Story telah ditampilkan.
+
+    b. Menampilkan detail Story.
+
+       Memastikan menuju ke halaman DetailActivity.
+
+       Memastikan halaman detail menampilkan Letter.
+
+    c. Menampilkan Map
+
+       Memastikan menuju ke halaman MapActivity.
+
+       Memastikan map telah ditampilkan
 
